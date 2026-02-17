@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - CEC{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="header-section">
+        <div class="logo-circle">CEC</div>
+        <h1>Welcome, {{ student.name }}</h1>
+        <p class="tagline">Track your placement preparation and analytics</p>
+    </div>
+
+    <div class="chart-container">
+        <h3>Mock Test Performance</h3>
+        <canvas id="progressChart"></canvas>
+    </div>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <i class="bi bi-robot"></i>
+            <h5>Resume AI</h5>
+            <p>Enhance your resume with AI suggestions.</p>
+            <a href="{{ url_for('resume_enhancer') }}" class="dash-btn">Enhance</a>
+        </div>
+
+        <div class="feature-card">
+            <i class="bi bi-journal-check"></i>
+            <h5>Mock Test</h5>
+            <p>Practice placement mock tests.</p>
+            <a href="{{ url_for('mock_test') }}" class="dash-btn">Start</a>
+        </div>
+
+        <div class="feature-card">
+            <i class="bi bi-bar-chart-line"></i>
+            <h5>Analytics</h5>
+            <p>View your performance reports.</p>
+            <a href="{{ url_for('analytics_report') }}" class="dash-btn">View</a>
+        </div>
+
+        <div class="feature-card">
+            <i class="bi bi-pencil-square"></i>
+            <h5>Edit Profile</h5>
+            <p>Update your personal information.</p>
+            <a href="{{ url_for('edit_student', student_id=student.student_id) }}" class="dash-btn">Edit</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    const ctx = document.getElementById('progressChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ labels | safe }},
+            datasets: [{
+                label: 'Score',
+                data: {{ scores | safe }},
+                borderColor: '#ff69b4',
+                backgroundColor: 'rgba(255, 105, 180, 0.2)',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true,
+                pointBackgroundColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                x: { ticks: { color: '#ffffff' }, grid: { display: false } }
+            },
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+</script>
+{% endblock %}

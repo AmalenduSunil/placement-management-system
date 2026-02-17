@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Home - CEC Placement Portal{% endblock %}
+
+{% block body_class %}home-page{% endblock %}
+
+{% block content %}
+<div class="home-box">
+    <div class="logo-circle">
+    <img src="{{ url_for('static', filename='CECCherthala-removebg-preview.png') }}" alt="CEC Logo" style="width: 80%; height: auto;">
+</div>
+    <p style="font-size: 0.9rem; margin-bottom: 5px; opacity: 0.8;">College of Engineering Cherthala</p>
+    <h1>Placement Management System</h1>
+    <hr style="width: 50px; margin: 15px auto; border: 1px solid rgba(255,255,255,0.3);">
+    <h2>Student Login</h2>
+    <p class="tagline">Your future starts here. Please login or create an account.</p>
+    
+    <div class="btn-group">
+        <a class="home-btn login-btn" href="{{ url_for('login_page') }}">Login</a>
+        <a class="home-btn register-btn" href="{{ url_for('student_signup') }}">Register</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,367 @@
+/* Import Poppins for that clean look */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Unified Background for all pages */
+.home-page, .login-page, .register-page {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* The requested Violet + Blue + Pink Gradient */
+    background: linear-gradient(135deg, #2e0249 0%, #570a57 40%, #a91079 80%, #ff69b4 100%);
+    background-attachment: fixed;
+    color: white;
+    overflow: hidden;
+}
+
+/* The Glassmorphism Card */
+.home-box, .card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 50px;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 24px;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    animation: fadeIn 0.8s ease-out;
+}
+.logo-circle img {
+    width: 80%;
+    height: auto;
+    /* This filter turns dark colors into white */
+    filter: brightness(0) invert(1); 
+}
+/* CEC Logo Circle */
+.logo-circle {
+    width: 70px;
+    height: 70px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    font-weight: 800;
+    font-size: 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.home-box h1 {
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.2;
+    margin-bottom: 10px;
+}
+
+.home-box h2 {
+    font-weight: 400;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+.tagline {
+    font-size: 0.95rem;
+    margin-bottom: 30px;
+    opacity: 0.8;
+}
+
+/* Button Group Styling */
+.btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.home-btn {
+    text-decoration: none;
+    padding: 12px 35px;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+/* Specific Button Colors */
+.login-btn {
+    background: #ffffff;
+    color: #570a57;
+}
+
+.register-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid white;
+}
+
+.home-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    background: #ff69b4; /* Pink highlight on hover */
+    color: white;
+    border-color: transparent;
+}
+/* Styling for Login/Register Inputs to match the Glass theme */
+.input-group input {
+    width: 100%;
+    padding: 12px 12px 12px 35px;
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: white;
+    outline: none;
+    transition: 0.3s;
+}
+
+.input-group input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.input-group input:focus {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #ff69b4; /* Pink border on focus */
+    box-shadow: 0 0 10px rgba(255, 105, 180, 0.3);
+}
+
+/* Update labels to stay white/pink */
+.input-group label {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.input-group input:focus + label,
+.input-group input:valid + label {
+    color: #ff69b4;
+    background: transparent; /* Remove the white background from the label */
+}
+/* Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+/* Fix for Floating Labels */
+.input-group {
+    position: relative;
+    margin-bottom: 30px; /* Space between inputs */
+    text-align: left;
+}
+
+.input-group label {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.6);
+    pointer-events: none;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+/* This triggers when the input is focused OR has text in it */
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+    top: -12px;
+    left: 10px;
+    font-size: 0.8rem;
+    color: #ff69b4;
+    font-weight: 600;
+}
+
+/* The Login Submit Button */
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 50px;
+    background: white;
+    color: #570a57;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.submit-btn:hover {
+    background: #ff69b4;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Ensure the card title looks great */
+.card h2 {
+    font-weight: 700;
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+}
+/* Fix for Floating Labels in Registration/Login */
+.input-group {
+    position: relative;
+    margin-bottom: 25px; 
+    text-align: left;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 15px 15px 15px 15px !important; /* Increased padding for better look */
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 12px !important;
+    color: white !important;
+    font-size: 1rem;
+}
+
+.input-group label {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease;
+    background: transparent !important;
+    padding: 0 5px;
+}
+
+/* The Magic: Label floats up when focused or typed in */
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+    top: -10px;
+    left: 12px;
+    font-size: 0.75rem;
+    color: #ff69b4;
+    font-weight: 600;
+}
+
+/* Style for the Register/Login button */
+button[type="submit"], .submit-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 50px;
+    border: none;
+    background: white;
+    color: #570a57;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 15px;
+}
+
+button[type="submit"]:hover, .submit-btn:hover {
+    background: #ff69b4;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(255, 105, 180, 0.3);
+}
+
+.login-link {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.error {
+    color: #ffb7b7;
+    font-size: 0.75rem;
+    display: block;
+    margin-top: -20px;
+    margin-bottom: 15px;
+    text-align: left;
+    margin-left: 15px;
+}
+/* Dashboard Page Specifics */
+.dashboard-page {
+    min-height: 100vh;
+    padding: 40px 20px;
+    overflow-y: auto !important; /* Allow scrolling on dashboard */
+}
+
+.dashboard-container {
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.header-section {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* The Large Chart Card */
+.chart-container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
+    padding: 30px;
+    margin-bottom: 40px;
+    height: 350px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+
+.chart-container h3 {
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* Feature Grid Layout */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+/* The Feature Glass Cards */
+.feature-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #ff69b4;
+}
+
+.feature-card i {
+    font-size: 2.5rem;
+    color: #ff69b4;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.feature-card h5 { font-weight: 700; margin-bottom: 10px; }
+.feature-card p { font-size: 0.85rem; opacity: 0.8; margin-bottom: 20px; }
+
+/* Dashboard Buttons */
+.dash-btn {
+    display: inline-block;
+    padding: 8px 25px;
+    background: white;
+    color: #570a57;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: 0.3s;
+}
+
+.dash-btn:hover {
+    background: #ff69b4;
+    color: white;
+    box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Register - CEC{% endblock %}
+{% block body_class %}register-page{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="logo-circle">CEC</div>
+    <h2>Create Account</h2>
+    <p style="font-size: 0.9rem; margin-bottom: 25px; opacity: 0.8;">Start your professional journey with CEC Placement Cell</p>
+
+    <form method="POST" onsubmit="return validateSignupForm()">
+        <div class="input-group">
+            <input type="text" name="name" id="name" required placeholder=" ">
+            <label for="name">Full Name</label>
+        </div>
+        <span id="nameError" class="error"></span>
+
+        <div class="input-group">
+            <input type="email" name="email" id="email" required placeholder=" ">
+            <label for="email">Email Address</label>
+        </div>
+        <span id="emailError" class="error"></span>
+
+        <div class="input-group">
+            <input type="password" name="password" id="password" required placeholder=" ">
+            <label for="password">Password</label>
+        </div>
+        <span id="passwordError" class="error"></span>
+
+        <button type="submit" class="submit-btn">Register</button>
+
+        <div class="login-link">
+            Already have an account? 
+            <a href="{{ url_for('login_page') }}" style="color: #ff69b4; text-shadow: none;">Login</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
