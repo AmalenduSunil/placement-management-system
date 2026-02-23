@@ -9,16 +9,23 @@
 }
 
 /* Unified Background for all pages */
-.home-page, .login-page, .register-page {
-    height: 100vh;
+/* Update your background selector */
+.home-page, .login-page, .register-page, .dashboard-page, .edit-page {
+    /* 1. Change height to min-height to allow expansion */
+    min-height: 100vh; 
+    
     display: flex;
     justify-content: center;
     align-items: center;
-    /* The requested Violet + Blue + Pink Gradient */
     background: linear-gradient(135deg, #2e0249 0%, #570a57 40%, #a91079 80%, #ff69b4 100%);
     background-attachment: fixed;
     color: white;
-    overflow: hidden;
+
+    /* 2. Change hidden to auto so the scrollbar appears when needed */
+    overflow-y: auto; 
+
+    /* 3. Add padding so content doesn't touch the very top/bottom edges */
+    padding: 40px 20px; 
 }
 
 /* The Glassmorphism Card */
@@ -364,4 +371,45 @@ button[type="submit"]:hover, .submit-btn:hover {
     background: #ff69b4;
     color: white;
     box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+}
+.dashboard-page h1, 
+.dashboard-page h2, 
+.dashboard-page h3, 
+.dashboard-page p {
+    color: white !important;
+}
+.edit-page h2, .edit-page p {
+    color: white !important;
+}
+
+/* Fix for the side-by-side Year/CGPA inputs on mobile */
+@media (max-width: 480px) {
+    .card form div[style*="display: flex"] {
+        flex-direction: column;
+        gap: 0 !important;
+    }
+}
+/* Specific padding for password field to accommodate the eye icon */
+#password {
+    padding-right: 45px !important;
+}
+
+#togglePassword:hover {
+    color: #ff69b4 !important; /* Glow pink on hover */
+}
+/* Styling for Tables inside Glass Cards */
+.feature-card table th {
+    font-weight: 600;
+    color: #ff69b4;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.feature-card table td {
+    opacity: 0.9;
+}
+
+/* Ensure Admin Form inputs don't have massive bottom margins */
+.chart-container .input-group {
+    margin-bottom: 10px;
 }

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Details - CEC{% endblock %}
+{% block body_class %}edit-page{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 600px;"> <div class="logo-circle">CEC</div>
+    <h2>Edit Profile</h2>
+    <p style="font-size: 0.9rem; margin-bottom: 25px; opacity: 0.8;">Keep your placement records up to date</p>
+
+    <form method="POST">
+        <div class="input-group">
+            <input type="text" name="name" id="name" value="{{ student.name }}" required placeholder=" ">
+            <label for="name">Full Name</label>
+        </div>
+
+        <div class="input-group">
+            <input type="email" name="email" id="email" value="{{ student.email }}" required placeholder=" ">
+            <label for="email">Email Address</label>
+        </div>
+
+        <div class="input-group">
+            <input type="text" name="phone" id="phone" value="{{ student.phone or '' }}" placeholder=" ">
+            <label for="phone">Phone Number</label>
+        </div>
+
+        <div class="input-group">
+            <input type="text" name="department" id="department" value="{{ student.department or '' }}" placeholder=" ">
+            <label for="department">Department</label>
+        </div>
+
+        <div style="display: flex; gap: 15px;">
+            <div class="input-group" style="flex: 1;">
+                <input type="number" name="year" id="year" value="{{ student.year or '' }}" placeholder=" ">
+                <label for="year">Year</label>
+            </div>
+            <div class="input-group" style="flex: 1;">
+                <input type="number" step="0.01" name="cgpa" id="cgpa" value="{{ student.cgpa or '' }}" placeholder=" ">
+                <label for="cgpa">Current CGPA</label>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn">Save Changes</button>
+        
+        <div class="login-link">
+            <a href="{{ url_for('student_dashboard', student_id=student.st_id) }}" style="color: #ffffff; opacity: 0.7; text-decoration: none;">← Cancel and Return</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

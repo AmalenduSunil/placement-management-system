@@ -59,6 +59,9 @@ class Placement(db.Model):
     package = db.Column(db.Float)
     eligicri = db.Column(db.Text)
 
+    date = db.Column(db.Date)
+    venue = db.Column(db.String(120))
+    
     admin_id = db.Column(db.Integer, db.ForeignKey('admin.ad_id'), nullable=False)
 
     # Applications

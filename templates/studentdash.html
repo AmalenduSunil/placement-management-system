@@ -42,34 +42,41 @@
             <i class="bi bi-pencil-square"></i>
             <h5>Edit Profile</h5>
             <p>Update your personal information.</p>
-            <a href="{{ url_for('edit_student', student_id=student.student_id) }}" class="dash-btn">Edit</a>
+            <a href="{{ url_for('edit_student', student_id=student.st_id) }}" class="dash-btn">Edit</a>        
         </div>
     </div>
 </div>
 
 <script>
     const ctx = document.getElementById('progressChart').getContext('2d');
+
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: {{ labels | safe }},
+            labels: {{ labels | tojson }},
             datasets: [{
                 label: 'Score',
-                data: {{ scores | safe }},
+                data: {{ scores | tojson }},
                 borderColor: '#ff69b4',
                 backgroundColor: 'rgba(255, 105, 180, 0.2)',
                 borderWidth: 3,
                 tension: 0.4,
                 fill: true,
-                pointBackgroundColor: '#ffffff'
+                pointBackgroundColor: '#ffffff',
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
             scales: {
-                y: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
-                x: { ticks: { color: '#ffffff' }, grid: { display: false } }
+                y: {
+                    ticks: { color: '#ffffff' },
+                    grid: { color: 'rgba(255,255,255,0.1)' }
+                },
+                x: {
+                    ticks: { color: '#ffffff' },
+                    grid: { display: false }
+                }
             },
             plugins: {
                 legend: { display: false }

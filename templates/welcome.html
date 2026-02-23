@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome - CEC Placement Portal{% endblock %}
+{% block body_class %}home-page{% endblock %}
+
+{% block content %}
+<div class="home-box">
+    <div class="logo-circle">CEC</div>
+
+    <h1>Welcome to</h1>
+    <h2>Placement Management System</h2>
+
+    <p class="tagline">
+        Please select your role to continue
+    </p>
+
+    <div class="btn-group">
+        <a class="home-btn login-btn" href="{{ url_for('login_page') }}">
+            Student
+        </a>
+
+        <a class="home-btn register-btn" href="{{ url_for('admin_login') }}">
+            Admin
+        </a>
+    </div>
+</div>
+{% endblock %}

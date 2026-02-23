@@ -1,19 +1,19 @@
 {% extends "base.html" %}
 
-{% block title %}Login - CEC{% endblock %}
+{% block title %}Admin Login - CEC{% endblock %}
 
 {% block body_class %}login-page{% endblock %}
 
 {% block content %}
 <div class="card">
     <div class="logo-circle">CEC</div>
-    <h2>Student Login</h2>
-    <p style="font-size: 0.9rem; margin-bottom: 25px; opacity: 0.8;">Enter your credentials to access the portal</p>
+    <h2>Admin Login</h2>
+    <p style="font-size: 0.9rem; margin-bottom: 25px; opacity: 0.8;">Authorized Access Only</p>
 
-    <form method="POST" action="{{ url_for('login_page') }}">
+    <form method="POST">
         <div class="input-group">
             <input type="email" name="email" id="email" required placeholder=" ">
-            <label for="email">Email Address</label>
+            <label for="email">Admin Email</label>
         </div>
 
         <div class="input-group">
@@ -22,11 +22,21 @@
             <i class="bi bi-eye-slash" id="togglePassword" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: rgba(255,255,255,0.6); z-index: 10;"></i>
         </div>
 
-        <button type="submit" class="submit-btn">Login</button>
+        <button type="submit" class="submit-btn">Secure Login</button>
     </form>
     
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="error" style="margin-top: 15px; color: #ffb7b7; text-align: center;">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
     <div style="margin-top: 20px; font-size: 0.85rem;">
-        Don't have an account? <a href="{{ url_for('student_signup') }}" style="color: #ff69b4; text-decoration: none; font-weight: 600;">Register</a>
+        <a href="{{ url_for('welcome_page') }}" style="color: #ffffff; opacity: 0.7; text-decoration: none;">← Back to Home</a>
     </div>
 </div>
 
@@ -34,12 +44,9 @@
     const togglePassword = document.querySelector('#togglePassword');
     const password = document.querySelector('#password');
 
-    togglePassword.addEventListener('click', function (e) {
-        // Toggle the type attribute
+    togglePassword.addEventListener('click', function () {
         const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
         password.setAttribute('type', type);
-        
-        // Toggle the icon
         this.classList.toggle('bi-eye');
         this.classList.toggle('bi-eye-slash');
     });

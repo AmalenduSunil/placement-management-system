@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - CEC{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="header-section" style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="text-align: left;">
+            <div class="logo-circle" style="margin: 0;">CEC</div>
+            <h1 style="font-size: 1.8rem; margin-top: 10px;">Admin Control Panel</h1>
+        </div>
+        <a href="/admin/logout" class="dash-btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid white;">Logout</a>
+    </div>
+
+    <div class="feature-grid" style="margin-bottom: 40px;">
+        <div class="feature-card">
+            <i class="bi bi-people"></i>
+            <h5>Total Students</h5>
+            <h2 style="color: #ff69b4;">{{ total_students }}</h2>
+        </div>
+        <div class="feature-card">
+            <i class="bi bi-briefcase"></i>
+            <h5>Placements</h5>
+            <h2 style="color: #ff69b4;">{{ total_placements }}</h2>
+        </div>
+        <div class="feature-card">
+            <i class="bi bi-file-earmark-text"></i>
+            <h5>Applications</h5>
+            <h2 style="color: #ff69b4;">{{ total_applications }}</h2>
+        </div>
+        <div class="feature-card">
+            <i class="bi bi-shield-check"></i>
+            <h5>Fraud Checks</h5>
+            <h2 style="color: #ff69b4;">{{ total_fraud_checks }}</h2>
+        </div>
+    </div>
+
+    <div class="chart-container" style="height: auto; min-height: 200px; margin-bottom: 40px;">
+    <h3 style="margin-bottom: 20px;">Add New Placement Drive</h3>
+    <form method="POST" action="/add_placement" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+        <div class="input-group">
+            <input type="text" name="cmpname" required placeholder=" ">
+            <label>Company Name</label>
+        </div>
+        <div class="input-group">
+            <input type="text" name="jobreq" required placeholder=" ">
+            <label>Job Role</label>
+        </div>
+        <div class="input-group">
+            <input type="number" step="0.1" name="package" required placeholder=" ">
+            <label>Package (LPA)</label>
+        </div>
+        <div class="input-group">
+            <input type="text" name="eligicri" required placeholder=" ">
+            <label>Eligibility</label>
+        </div>
+        <div style="grid-column: 1 / -1; text-align: center;">
+            <button type="submit" class="submit-btn" style="width: 250px; margin: 0 auto;">Add Drive</button>
+        </div>
+    </form>
+</div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px;">
+        <div class="feature-card" style="text-align: left; overflow-x: auto;">
+            <h4 style="margin-bottom: 15px;"><i class="bi bi-list-stars" style="display: inline; font-size: 1.2rem;"></i> Active Drives</h4>
+            <table style="width: 100%; border-collapse: collapse; color: white; font-size: 0.85rem;">
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                    <th style="padding: 10px 5px; text-align: left;">Company</th>
+                    <th style="padding: 10px 5px; text-align: left;">LPA</th>
+                    <th style="padding: 10px 5px; text-align: left;">Criteria</th>
+                </tr>
+                {% for p in placements %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 10px 5px;">{{ p.cmpname }}</td>
+                    <td style="padding: 10px 5px;">{{ p.package }}</td>
+                    <td style="padding: 10px 5px;">{{ p.eligicri }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="feature-card" style="text-align: left; overflow-x: auto;">
+            <h4 style="margin-bottom: 15px;"><i class="bi bi-person-badge" style="display: inline; font-size: 1.2rem;"></i> Manage Students</h4>
+            <table style="width: 100%; border-collapse: collapse; color: white; font-size: 0.85rem;">
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                    <th style="padding: 10px 5px; text-align: left;">Name</th>
+                    <th style="padding: 10px 5px; text-align: left;">Action</th>
+                </tr>
+                {% for s in students %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 10px 5px;">{{ s.name }}</td>
+                    <td style="padding: 10px 5px;">
+                        <a href="/delete_student/{{ s.st_id }}" style="color: #ffb7b7; text-decoration: none; font-weight: 600;">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <h3>System Analytics</h3>
+        <canvas id="adminChart"></canvas>
+    </div>
+</div>
+
+<script>
+const ctx = document.getElementById('adminChart').getContext('2d');
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Students', 'Placements', 'Applications'],
+        datasets: [{
+            label: 'Total Count',
+            data: [{{ total_students }}, {{ total_placements }}, {{ total_applications }}],
+            backgroundColor: ['#ff69b4', '#a91079', '#570a57'],
+            borderRadius: 10
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: { beginAtZero: true, ticks: { color: '#ffffff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+            x: { ticks: { color: '#ffffff' }, grid: { display: false } }
+        },
+        plugins: { legend: { display: false } }
+    }
+});
+</script>
+{% endblock %}
