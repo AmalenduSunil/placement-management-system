@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}AI Question Generator - CEC{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="chart-container" style="height: auto;">
+        <h2>Generate AI Questions</h2>
+        <p class="tagline">Test: <strong>{{ test.title }}</strong></p>
+        <form method="POST">
+            <div class="input-group">
+                <select name="topic" required style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white;">
+                    <option value="aptitude">Aptitude</option>
+                    <option value="python">Python</option>
+                    <option value="sql">SQL</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <select name="difficulty" required style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white;">
+                    <option value="easy">Easy</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <input type="number" name="total_questions" min="1" max="50" value="10" required placeholder=" ">
+                <label>Total Questions (1-50)</label>
+            </div>
+
+            <button type="submit" class="submit-btn">Generate Questions</button>
+        </form>
+
+        <div style="margin-top: 24px;">
+            <a href="{{ url_for('admin_dashboard') }}" class="dash-btn">&larr; Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

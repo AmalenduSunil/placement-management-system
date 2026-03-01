@@ -5,10 +5,14 @@
 
 {% block content %}
 <div class="dashboard-container">
-    <div class="header-section">
-        <div class="logo-circle">CEC</div>
-        <h1>Welcome, {{ student.name }}</h1>
-        <p class="tagline">Track your placement preparation and analytics</p>
+    <div class="header-section" style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="text-align: left;">
+            <div class="logo-circle" style="margin: 0;">CEC</div>
+            <h1 style="margin-top: 10px;">Welcome, {{ student.name }}</h1>
+            <p class="tagline" style="margin-bottom: 6px;">Register Number: {{ student.register_number }}</p>
+            <p class="tagline">Track your placement preparation and analytics</p>
+        </div>
+        <a href="{{ url_for('student_logout') }}" class="dash-btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid white;">Logout</a>
     </div>
 
     <div class="chart-container">
@@ -47,10 +51,14 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+    if (!window.Chart) {
+        console.error("Chart.js failed to load");
+    }
     const ctx = document.getElementById('progressChart').getContext('2d');
 
-    new Chart(ctx, {
+    if (window.Chart) new Chart(ctx, {
         type: 'line',
         data: {
             labels: {{ labels | tojson }},

@@ -4,7 +4,8 @@
 {% block body_class %}edit-page{% endblock %}
 
 {% block content %}
-<div class="card" style="max-width: 600px;"> <div class="logo-circle">CEC</div>
+<div class="card" style="max-width: 600px;">
+    <div class="logo-circle">CEC</div>
     <h2>Edit Profile</h2>
     <p style="font-size: 0.9rem; margin-bottom: 25px; opacity: 0.8;">Keep your placement records up to date</p>
 
@@ -29,6 +30,11 @@
             <label for="department">Department</label>
         </div>
 
+        <div class="input-group">
+            <input type="number" min="0" name="number_of_arrears" id="number_of_arrears" value="{{ student.number_of_arrears if student.number_of_arrears is not none else 0 }}" placeholder=" ">
+            <label for="number_of_arrears">Number of Arrears</label>
+        </div>
+
         <div style="display: flex; gap: 15px;">
             <div class="input-group" style="flex: 1;">
                 <input type="number" name="year" id="year" value="{{ student.year or '' }}" placeholder=" ">
@@ -40,10 +46,29 @@
             </div>
         </div>
 
+        <h3 style="margin: 14px 0 10px; text-align: left;">Change Password (Optional)</h3>
+        <div class="input-group">
+            <input type="password" name="current_password" id="current_password" placeholder=" ">
+            <label for="current_password">Current Password</label>
+        </div>
+
+        <div class="input-group">
+            <input type="password" name="new_password" id="new_password" placeholder=" ">
+            <label for="new_password">New Password</label>
+        </div>
+
+        <div class="input-group">
+            <input type="password" name="confirm_password" id="confirm_password" placeholder=" ">
+            <label for="confirm_password">Confirm New Password</label>
+        </div>
+        <p style="font-size: 0.75rem; opacity: 0.8; text-align: left; margin-top: -8px; margin-bottom: 14px;">
+            Strong password: 8+ chars with uppercase, lowercase, number, and special character.
+        </p>
+
         <button type="submit" class="submit-btn">Save Changes</button>
-        
+
         <div class="login-link">
-            <a href="{{ url_for('student_dashboard', student_id=student.st_id) }}" style="color: #ffffff; opacity: 0.7; text-decoration: none;">← Cancel and Return</a>
+            <a href="{{ url_for('student_dashboard') }}" style="color: #ffffff; opacity: 0.7; text-decoration: none;">&larr; Cancel and Return</a>
         </div>
     </form>
 </div>

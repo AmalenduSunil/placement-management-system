@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Attend Test - CEC{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="chart-container" style="height: auto;">
+        <h2>{{ test.title }}</h2>
+        <p><strong>Topic:</strong> {{ test.topic or "General" }}</p>
+        <p>{{ test.description or "No description provided." }}</p>
+        <p><strong>Duration:</strong> {{ test.duration }} minutes</p>
+        <p><strong>Time Elapsed:</strong> <span id="elapsedLabel">00:00</span></p>
+    </div>
+
+    <form method="POST">
+        <input type="hidden" name="started_at_iso" id="startedAtIso">
+        <input type="hidden" name="elapsed_seconds" id="elapsedSeconds" value="0">
+        {% for question in questions %}
+        <div class="feature-card" style="text-align: left; margin-bottom: 15px;">
+            <p><strong>Q{{ loop.index }}: {{ question.question_text }}</strong></p>
+
+            {% if question.question_type == "MCQ" %}
+                <label><input type="radio" name="question_{{ question.question_id }}" value="A"> {{ question.option_a }}</label><br>
+                <label><input type="radio" name="question_{{ question.question_id }}" value="B"> {{ question.option_b }}</label><br>
+                <label><input type="radio" name="question_{{ question.question_id }}" value="C"> {{ question.option_c }}</label><br>
+                <label><input type="radio" name="question_{{ question.question_id }}" value="D"> {{ question.option_d }}</label>
+            {% else %}
+                <textarea name="question_{{ question.question_id }}" rows="5" style="width: 100%; padding: 10px; border-radius: 8px;" placeholder="Write your code here..."></textarea>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="submit-btn">Submit Test</button>
+    </form>
+
+    <div style="margin-top: 24px;">
+        <a href="{{ url_for('mock_tests') }}" class="dash-btn">&larr; Back</a>
+    </div>
+</div>
+<script>
+    const startedAt = new Date();
+    document.getElementById("startedAtIso").value = startedAt.toISOString();
+
+    function formatMMSS(totalSeconds) {
+        const mm = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
+        const ss = String(totalSeconds % 60).padStart(2, "0");
+        return `${mm}:${ss}`;
+    }
+
+    setInterval(function () {
+        const now = new Date();
+        const elapsed = Math.max(0, Math.floor((now - startedAt) / 1000));
+        document.getElementById("elapsedSeconds").value = elapsed;
+        document.getElementById("elapsedLabel").textContent = formatMMSS(elapsed);
+    }, 1000);
+</script>
+{% endblock %}

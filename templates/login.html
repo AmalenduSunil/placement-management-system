@@ -44,4 +44,13 @@
         this.classList.toggle('bi-eye-slash');
     });
 </script>
+{% if logged_out %}
+<script>
+    // After logout: pressing Back from login should go to welcome page.
+    history.pushState({ afterLogout: true }, "", window.location.href);
+    window.addEventListener("popstate", function () {
+        window.location.replace("{{ url_for('welcome_page') }}");
+    });
+</script>
+{% endif %}
 {% endblock %}

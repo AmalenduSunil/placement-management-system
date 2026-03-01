@@ -1,5 +1,4 @@
 function validateSignupForm() {
-
     let isValid = true;
 
     let registerNumber = document

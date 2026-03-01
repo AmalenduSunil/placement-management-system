@@ -285,6 +285,42 @@ button[type="submit"]:hover, .submit-btn:hover {
     text-align: left;
     margin-left: 15px;
 }
+
+.flash-container {
+    position: fixed;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(92%, 680px);
+    z-index: 1000;
+}
+
+.flash-message {
+    padding: 12px 14px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #fff;
+}
+
+.flash-success {
+    background: rgba(22, 163, 74, 0.35);
+}
+
+.flash-danger {
+    background: rgba(220, 38, 38, 0.35);
+}
+
+.flash-warning {
+    background: rgba(217, 119, 6, 0.35);
+}
+
+.flash-info {
+    background: rgba(37, 99, 235, 0.35);
+}
 /* Dashboard Page Specifics */
 .dashboard-page {
     min-height: 100vh;
@@ -412,4 +448,31 @@ button[type="submit"]:hover, .submit-btn:hover {
 /* Ensure Admin Form inputs don't have massive bottom margins */
 .chart-container .input-group {
     margin-bottom: 10px;
+}
+
+/* Fix for scrolling within the Dashboard */
+.dashboard-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Ensure tables are readable on dark background */
+table th {
+    color: #ff69b4 !important;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+/* Add a custom scrollbar for the glass theme */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+::-webkit-scrollbar-thumb {
+    background: #ff69b4;
+    border-radius: 10px;
 }
