@@ -1,0 +1,44 @@
+section,question_text,option_a,option_b,option_c,option_d,correct_answer
+Aptitude,What is 15 + 27?,40,41,42,43,42
+Aptitude,What is 12 * 8?,84,96,88,92,96
+Aptitude,What is 100 / 5?,10,20,25,30,20
+Aptitude,What is 25% of 200?,25,40,50,60,50
+Aptitude,What is the square of 9?,72,81,90,99,81
+Aptitude,What is 45 - 19?,24,25,26,27,26
+Aptitude,What is the average of 10,20,30?,15,20,25,30,20
+Aptitude,What is 7 * 6?,36,40,42,48,42
+Aptitude,What is 64 / 8?,6,7,8,9,8
+Aptitude,What is the cube of 3?,6,9,18,27,27
+
+Logical,Find the next number: 2 4 6 8 ?,9,10,11,12,10
+Logical,Find the next number: 3 6 9 12 ?,14,15,16,18,15
+Logical,Find the next number: 1 4 9 16 ?,20,21,25,36,25
+Logical,Odd one out,Apple,Banana,Car,Mango,Car
+Logical,Which is different?,Cow,Dog,Tiger,Car,Car
+Logical,Find next letter: A C E G ?,H,I,J,K,I
+Logical,If A=1 B=2 C=3 then CAB=?,123,213,231,312,312
+Logical,If 5 → 25 and 6 → 36 then 7 → ?,42,49,56,63,49
+Logical,Find the missing number: 5 10 20 40 ?,60,70,80,90,80
+Logical,Odd one out among shapes,Circle,Square,Triangle,Banana,Banana
+
+Technical,Which language is mainly used for web development?,Python,JavaScript,C,Java,JavaScript
+Technical,Which data structure uses FIFO?,Stack,Queue,Tree,Graph,Queue
+Technical,Which keyword defines a function in Python?,func,function,def,define,def
+Technical,Which language is used to query databases?,SQL,HTML,CSS,XML,SQL
+Technical,Which symbol is used for comments in Python?,//,#,<!--,**,#
+Technical,Which data structure uses LIFO?,Queue,Stack,Tree,Graph,Stack
+Technical,Which company created Python?,Google,Microsoft,Guido van Rossum,Apple,Guido van Rossum
+Technical,Which keyword creates a class in Python?,function,class,define,struct,class
+Technical,What does HTML stand for?,Hyper Trainer Marking Language,Hyper Text Markup Language,Hyper Text Marketing Language,Hyper Tool Multi Language,Hyper Text Markup Language
+Technical,Which database type is MySQL?,Relational,NoSQL,Graph,Document,Relational
+
+Coding,What is the output of print(2+3*4)?,20,14,24,10,14
+Coding,What is the output of len('Hello')?,4,5,6,7,5
+Coding,Which loop repeats until a condition becomes false?,for,while,switch,case,while
+Coding,Which data type stores True or False?,int,string,boolean,float,boolean
+Coding,Which operator checks equality in Python?,=,==,!=,>=,==
+Coding,What is the output of print(10//3)?,3,3.33,4,5,3
+Coding,Which keyword is used to exit a loop?,stop,exit,break,return,break
+Coding,Which function prints output in Python?,echo,print,display,write,print
+Coding,Which keyword imports a module in Python?,include,require,import,load,import
+Coding,What is the output of print(3**2)?,6,9,12,15,9

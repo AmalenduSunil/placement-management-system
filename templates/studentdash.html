@@ -16,23 +16,23 @@
     </div>
 
     <div class="chart-container">
-        <h3>Mock Test Performance</h3>
+        <h3>Progress Overview</h3>
         <canvas id="progressChart"></canvas>
     </div>
 
     <div class="feature-grid">
         <div class="feature-card">
+            <i class="bi bi-journal-check"></i>
+            <h5>Mock Tests</h5>
+            <p>View tests, answer questions, and track score.</p>
+            <a href="{{ url_for('mock_tests') }}" class="dash-btn">View Tests</a>
+        </div>
+
+        <div class="feature-card">
             <i class="bi bi-robot"></i>
             <h5>Resume AI</h5>
             <p>Enhance your resume with AI suggestions.</p>
             <a href="{{ url_for('resume_enhancer') }}" class="dash-btn">Enhance</a>
-        </div>
-
-        <div class="feature-card">
-            <i class="bi bi-journal-check"></i>
-            <h5>Mock Test</h5>
-            <p>Practice placement mock tests.</p>
-            <a href="{{ url_for('mock_test') }}" class="dash-btn">Start</a>
         </div>
 
         <div class="feature-card">
@@ -48,6 +48,78 @@
             <p>Update your personal information.</p>
             <a href="{{ url_for('edit_student', student_id=student.st_id) }}" class="dash-btn">Edit</a>        
         </div>
+    </div>
+
+    <div class="feature-card" style="text-align: left; margin-top: 24px;">
+        <h4 style="margin-bottom: 8px;"><i class="bi bi-funnel" style="display: inline; font-size: 1.2rem;"></i> Eligibility Filtering</h4>
+        <p style="margin: 0 0 12px 0; opacity: 0.85; font-size: 0.88rem;">
+            Eligibility is calculated only from student profile data and company criteria: CGPA, department, year, backlogs, and skills.
+        </p>
+
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
+            <div style="padding: 10px 12px; border-radius: 10px; background: rgba(255,255,255,0.08);">Applied: <strong>{{ total_applied }}</strong></div>
+            <div style="padding: 10px 12px; border-radius: 10px; background: rgba(255,255,255,0.08);">Selected: <strong>{{ total_selected }}</strong></div>
+            <div style="padding: 10px 12px; border-radius: 10px; background: rgba(255,255,255,0.08);">Rejected: <strong>{{ total_rejected }}</strong></div>
+            <div style="padding: 10px 12px; border-radius: 10px; background: rgba(255,255,255,0.08);">Total Drives: <strong>{{ total_upcoming }}</strong></div>
+        </div>
+    </div>
+
+    <div class="feature-card" style="text-align: left; margin-top: 24px;">
+        <h4 style="margin-bottom: 12px;"><i class="bi bi-calendar-event" style="display: inline; font-size: 1.2rem;"></i> Eligibility Filtering Results</h4>
+        {% if upcoming_drives %}
+            {% for drive in upcoming_drives %}
+                <div style="padding: 10px 12px; border-radius: 10px; background: rgba(255,255,255,0.08); margin-bottom: 8px;">
+                    {% set eligibility = eligibility_results[drive.placeid] %}
+                    <div style="font-weight:600;">{{ drive.cmpname }}</div>
+                    <div style="margin-top:8px; font-size:0.82rem;">
+                        {% if eligibility.eligible %}
+                            <span class="badge bg-success" style="display:inline-block; padding:3px 8px; border-radius:12px;">Eligible</span>
+                        {% else %}
+                            <span class="badge bg-danger" style="display:inline-block; padding:3px 8px; border-radius:12px;">Not Eligible</span>
+                        {% endif %}
+                    </div>
+                    <ul style="margin:8px 0 0 16px; padding:0; font-size:0.82rem; opacity:0.9;">
+                        <li>CGPA Required: {{ drive.min_cgpa if drive.min_cgpa is not none else 'N/A' }} | Yours: {{ student.cgpa if student.cgpa is not none else 'N/A' }} {% if eligibility.cgpa_ok %}✅{% else %}❌{% endif %}</li>
+                        <li>Department Required: {{ drive.department or 'All' }} | Yours: {{ student.department or 'N/A' }} {% if eligibility.department_ok %}✅{% else %}❌{% endif %}</li>
+                        <li>Max Arrears: {{ drive.max_arrears if drive.max_arrears is not none else 'N/A' }} | Yours: {{ student.number_of_arrears if student.number_of_arrears is not none else 0 }} {% if eligibility.arrears_ok %}✅{% else %}❌{% endif %}</li>
+                        <li>Allowed Year: {{ drive.allowed_year if drive.allowed_year is not none else 'N/A' }} | Yours: {{ student.year if student.year is not none else 'N/A' }} {% if eligibility.year_ok %}✅{% else %}❌{% endif %}</li>
+                        <li>Required Skills: {{ ((drive.required_programming_languages or '') ~ ', ' ~ (drive.required_technical_skills or '') ~ ', ' ~ (drive.required_tools or '')).replace(' ,', '').strip(', ').strip() or 'N/A' }}</li>
+                        <li>Your Skills: {{ ((student.programming_languages or '') ~ ', ' ~ (student.technical_skills or '') ~ ', ' ~ (student.tools_technologies or '')).replace(' ,', '').strip(', ').strip() or 'N/A' }}</li>
+                    </ul>
+                    <div style="margin-top:10px;">
+                        <form method="POST" action="{{ url_for('apply_placement', placement_id=drive.placeid) }}" style="display:inline;">
+                            {% set company_key = (drive.cmpname or '')|trim|lower %}
+                            {% if company_key in applied_company_keys %}
+                                <button type="button" class="btn btn-secondary dash-btn" style="border:none; cursor:not-allowed;" disabled>Already Applied</button>
+                            {% elif eligibility.eligible %}
+                                <button type="submit" class="btn btn-primary dash-btn" style="border:none; cursor:pointer;">Apply Now</button>
+                            {% else %}
+                                <button type="button" class="btn btn-secondary dash-btn" style="border:none; cursor:not-allowed;" disabled>Not Eligible</button>
+                            {% endif %}
+                        </form>
+                    </div>
+                    {% if not eligibility.eligible %}
+                        <p class="text-danger" style="margin-top:8px; font-size:0.85rem;">You are not eligible for this drive.</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p style="opacity: 0.85;">No upcoming drives found.</p>
+        {% endif %}
+    </div>
+
+    <div class="feature-card" style="text-align: left; margin-top: 24px;">
+        <h4 style="margin-bottom: 12px;"><i class="bi bi-bell" style="display: inline; font-size: 1.2rem;"></i> Placement Notifications</h4>
+        {% if notifications %}
+            {% for note in notifications %}
+                <div style="padding: 10px 12px; border-radius: 10px; background: rgba(255,255,255,0.08); margin-bottom: 8px;">
+                    <div style="font-size: 0.9rem;">{{ note.msgtext }}</div>
+                    <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 4px;">{{ note.date.strftime('%d %b %Y, %I:%M %p') if note.date else '' }}</div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p style="opacity: 0.85;">No placement notifications yet.</p>
+        {% endif %}
     </div>
 </div>
 

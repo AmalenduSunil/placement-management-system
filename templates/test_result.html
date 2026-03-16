@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Test Result - CEC{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="header-section" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+        <div style="text-align:left;">
+            <div class="logo-circle" style="margin: 0;">CEC</div>
+            <h2 style="margin-top:10px;">Test Result</h2>
+            <p class="tagline" style="margin-bottom:0;">Your Score: {{ score }}/{{ total_questions }}</p>
+        </div>
+        <a href="{{ url_for('student_dashboard') }}" class="dash-btn">&larr; Back to Dashboard</a>
+    </div>
+
+    <div class="chart-container" style="height:340px;">
+        <h3>Performance Summary</h3>
+        <canvas id="performanceChart"></canvas>
+    </div>
+
+    <div class="feature-grid" style="margin-top: 20px;">
+        <div class="feature-card">
+            <h5>Aptitude Score</h5>
+            <h2 style="color:#ff69b4;">{{ aptitude_score }}/{{ aptitude_total }}</h2>
+        </div>
+        <div class="feature-card">
+            <h5>Logical Score</h5>
+            <h2 style="color:#ff69b4;">{{ logical_score }}/{{ logical_total }}</h2>
+        </div>
+        <div class="feature-card">
+            <h5>Technical Score</h5>
+            <h2 style="color:#ff69b4;">{{ technical_score }}/{{ technical_total }}</h2>
+        </div>
+        <div class="feature-card">
+            <h5>Coding Score</h5>
+            <h2 style="color:#ff69b4;">{{ coding_score }}/{{ coding_total }}</h2>
+        </div>
+    </div>
+
+    <div class="chart-container" style="height:340px;">
+        <h3>Overall Progress Chart</h3>
+        <canvas id="sectionChart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const score = {{ score | tojson }};
+const total = {{ total_questions | tojson }};
+const ctx = document.getElementById('performanceChart');
+const aptitudeScore = {{ aptitude_score | tojson }};
+const aptitudeTotal = {{ aptitude_total | tojson }};
+const logicalScore = {{ logical_score | tojson }};
+const logicalTotal = {{ logical_total | tojson }};
+const technicalScore = {{ technical_score | tojson }};
+const technicalTotal = {{ technical_total | tojson }};
+const codingScore = {{ coding_score | tojson }};
+const codingTotal = {{ coding_total | tojson }};
+
+if (window.Chart && ctx) {
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Correct', 'Incorrect'],
+            datasets: [{
+                data: [score, total - score]
+            }]
+        }
+    });
+}
+
+const sectionCtx = document.getElementById('sectionChart');
+if (window.Chart && sectionCtx) {
+    new Chart(sectionCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Aptitude', 'Logical', 'Technical', 'Coding'],
+            datasets: [{
+                label: 'Score %',
+                data: [
+                    aptitudeTotal ? (aptitudeScore / aptitudeTotal) * 100 : 0,
+                    logicalTotal ? (logicalScore / logicalTotal) * 100 : 0,
+                    technicalTotal ? (technicalScore / technicalTotal) * 100 : 0,
+                    codingTotal ? (codingScore / codingTotal) * 100 : 0
+                ],
+                backgroundColor: ['#ff69b4', '#ff9fd1', '#a91079', '#6a1b9a'],
+                borderRadius: 8
+            }]
+        },
+        options: {
+            scales: {
+                y: { beginAtZero: true, max: 100 }
+            },
+            plugins: { legend: { display: false } }
+        }
+    });
+}
+</script>
+{% endblock %}
