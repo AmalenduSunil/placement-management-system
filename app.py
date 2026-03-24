@@ -1,8 +1,11 @@
+import os
 import time
 from collections import deque
 from datetime import datetime, timedelta
 
 from flask import Flask, g, request
+from flask_mail import Mail
+from werkzeug.security import generate_password_hash
 from sqlalchemy import inspect, text
 from config import Config
 from model import *
@@ -11,6 +14,62 @@ from flask_login import LoginManager
 APP_START_TIME = datetime.utcnow()
 RECENT_RESPONSE_TIMES = deque(maxlen=500)
 RECENT_REQUEST_TIMESTAMPS = deque(maxlen=2000)
+mail = Mail()
+_DB_INIT_DONE = False
+
+
+def _should_run_startup_db_init(app: Flask) -> bool:
+    # Avoid touching a persistent DB when running unit tests.
+    try:
+        import sys
+
+        if app.config.get("TESTING") or "pytest" in sys.modules or os.environ.get("PYTEST_CURRENT_TEST"):
+            return False
+    except Exception:
+        pass
+
+    # Avoid duplicate startup work under Flask debug reloader.
+    if app.config.get("DEBUG", False):
+        return os.environ.get("WERKZEUG_RUN_MAIN") == "true"
+
+    return True
+
+
+def _ensure_default_admin(app: Flask):
+    """
+    Dev-friendly safety net: create a default admin in the configured DB
+    when enabled and no matching admin exists.
+    """
+    enabled_raw = (os.getenv("AUTO_CREATE_DEFAULT_ADMIN") or "").strip().lower()
+    if not enabled_raw:
+        enabled_raw = "1" if app.config.get("DEBUG", False) else "0"
+    if enabled_raw not in ("1", "true", "yes", "on"):
+        return
+
+    default_email = (os.getenv("DEFAULT_ADMIN_EMAIL") or "tpo@cec.ac.in").strip().lower()
+    default_name = (os.getenv("DEFAULT_ADMIN_NAME") or "TPO_CEC").strip()
+    default_password = os.getenv("DEFAULT_ADMIN_PASSWORD") or "admin123"
+
+    if not default_email or "@" not in default_email or not default_name or not default_password:
+        return
+
+    if Admin.query.filter_by(email=default_email).first():
+        return
+    if Admin.query.filter_by(name=default_name).first():
+        return
+
+    try:
+        db.session.add(
+            Admin(
+                email=default_email,
+                name=default_name,
+                password=generate_password_hash(default_password),
+            )
+        )
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+        raise
 
 # ----------------------------
 # Startup Migration Function
@@ -37,8 +96,26 @@ def run_startup_migrations():
             statements.append("ALTER TABLE students ADD COLUMN year INTEGER")
         if "cgpa" not in columns:
             statements.append("ALTER TABLE students ADD COLUMN cgpa FLOAT")
+        if "tenth_percentage" not in columns:
+            statements.append("ALTER TABLE students ADD COLUMN tenth_percentage FLOAT")
+        if "twelfth_percentage" not in columns:
+            statements.append("ALTER TABLE students ADD COLUMN twelfth_percentage FLOAT")
         if "number_of_arrears" not in columns:
             statements.append("ALTER TABLE students ADD COLUMN number_of_arrears INTEGER DEFAULT 0")
+        if "technical_skills" not in columns:
+            statements.append("ALTER TABLE students ADD COLUMN technical_skills TEXT")
+        if "programming_languages" not in columns:
+            statements.append("ALTER TABLE students ADD COLUMN programming_languages TEXT")
+        if "tools_technologies" not in columns:
+            statements.append("ALTER TABLE students ADD COLUMN tools_technologies TEXT")
+        if "projects" not in columns:
+            statements.append("ALTER TABLE students ADD COLUMN projects TEXT")
+        if "internship_experience" not in columns:
+            statements.append("ALTER TABLE students ADD COLUMN internship_experience TEXT")
+        if "certifications" not in columns:
+            statements.append("ALTER TABLE students ADD COLUMN certifications TEXT")
+        if "resume_pdf_path" not in columns:
+            statements.append("ALTER TABLE students ADD COLUMN resume_pdf_path VARCHAR(255)")
         if "created_at" not in columns:
             statements.append("ALTER TABLE students ADD COLUMN created_at DATETIME")
 
@@ -63,7 +140,16 @@ def run_startup_migrations():
                     department VARCHAR(80),
                     year INTEGER,
                     cgpa FLOAT,
+                    tenth_percentage FLOAT,
+                    twelfth_percentage FLOAT,
                     number_of_arrears INTEGER DEFAULT 0,
+                    technical_skills TEXT,
+                    programming_languages TEXT,
+                    tools_technologies TEXT,
+                    projects TEXT,
+                    internship_experience TEXT,
+                    certifications TEXT,
+                    resume_pdf_path VARCHAR(255),
                     created_at DATETIME
                 )
             """))
@@ -71,7 +157,10 @@ def run_startup_migrations():
             db.session.execute(text("""
                 INSERT INTO students_new (
                     register_number, st_id, name, email, password,
-                    phone, department, year, cgpa, number_of_arrears, created_at
+                    phone, department, year, cgpa, tenth_percentage, twelfth_percentage,
+                    number_of_arrears, technical_skills, programming_languages,
+                    tools_technologies, projects, internship_experience,
+                    certifications, resume_pdf_path, created_at
                 )
                 SELECT
                     CASE
@@ -81,7 +170,10 @@ def run_startup_migrations():
                     END,
                     st_id, name, email, password,
                     phone, department, year, cgpa,
+                    tenth_percentage, twelfth_percentage,
                     COALESCE(number_of_arrears, 0),
+                    technical_skills, programming_languages, tools_technologies,
+                    projects, internship_experience, certifications, resume_pdf_path,
                     COALESCE(created_at, CURRENT_TIMESTAMP)
                 FROM students
             """))
@@ -112,45 +204,24 @@ def run_startup_migrations():
             statements.append("ALTER TABLE placement ADD COLUMN date DATE")
         if "venue" not in columns:
             statements.append("ALTER TABLE placement ADD COLUMN venue VARCHAR(120)")
+        if "min_cgpa" not in columns:
+            statements.append("ALTER TABLE placement ADD COLUMN min_cgpa FLOAT")
+        if "department" not in columns:
+            statements.append("ALTER TABLE placement ADD COLUMN department VARCHAR(80)")
+        if "allowed_year" not in columns:
+            statements.append("ALTER TABLE placement ADD COLUMN allowed_year INTEGER")
+        if "max_arrears" not in columns:
+            statements.append("ALTER TABLE placement ADD COLUMN max_arrears INTEGER")
+        if "required_programming_languages" not in columns:
+            statements.append("ALTER TABLE placement ADD COLUMN required_programming_languages TEXT")
+        if "required_technical_skills" not in columns:
+            statements.append("ALTER TABLE placement ADD COLUMN required_technical_skills TEXT")
+        if "required_tools" not in columns:
+            statements.append("ALTER TABLE placement ADD COLUMN required_tools TEXT")
 
         for stmt in statements:
             db.session.execute(text(stmt))
 
-        if statements:
-            db.session.commit()
-
-    # ---------------- Mock Test Table ----------------
-    if "mock_test" in tables:
-        columns = {col["name"] for col in inspector.get_columns("mock_test")}
-        statements = []
-        if "topic" not in columns:
-            statements.append("ALTER TABLE mock_test ADD COLUMN topic VARCHAR(50) DEFAULT 'General'")
-        for stmt in statements:
-            db.session.execute(text(stmt))
-        if statements:
-            db.session.commit()
-
-    # ---------------- Student Test Table ----------------
-    if "student_test" in tables:
-        columns = {col["name"] for col in inspector.get_columns("student_test")}
-        statements = []
-        if "started_at" not in columns:
-            statements.append("ALTER TABLE student_test ADD COLUMN started_at DATETIME")
-        for stmt in statements:
-            db.session.execute(text(stmt))
-        if statements:
-            db.session.commit()
-
-    # ---------------- Student Answer Table ----------------
-    if "student_answer" in tables:
-        columns = {col["name"] for col in inspector.get_columns("student_answer")}
-        statements = []
-        if "is_correct" not in columns:
-            statements.append("ALTER TABLE student_answer ADD COLUMN is_correct BOOLEAN")
-        if "time_spent_sec" not in columns:
-            statements.append("ALTER TABLE student_answer ADD COLUMN time_spent_sec INTEGER DEFAULT 0")
-        for stmt in statements:
-            db.session.execute(text(stmt))
         if statements:
             db.session.commit()
 
@@ -159,8 +230,82 @@ def run_startup_migrations():
         columns = {col["name"] for col in inspector.get_columns("companies")}
         statements = []
 
+        if "industry" not in columns:
+            statements.append("ALTER TABLE companies ADD COLUMN industry VARCHAR(100)")
+        if "website" not in columns:
+            statements.append("ALTER TABLE companies ADD COLUMN website VARCHAR(200)")
+        if "contact_person" not in columns:
+            statements.append("ALTER TABLE companies ADD COLUMN contact_person VARCHAR(100)")
+        if "contact_email" not in columns:
+            statements.append("ALTER TABLE companies ADD COLUMN contact_email VARCHAR(120)")
+        if "contact_phone" not in columns:
+            statements.append("ALTER TABLE companies ADD COLUMN contact_phone VARCHAR(20)")
+        if "address" not in columns:
+            statements.append("ALTER TABLE companies ADD COLUMN address TEXT")
+        if "description" not in columns:
+            statements.append("ALTER TABLE companies ADD COLUMN description TEXT")
+        if "registration_number" not in columns:
+            statements.append("ALTER TABLE companies ADD COLUMN registration_number VARCHAR(50)")
         if "gst_number" not in columns:
             statements.append("ALTER TABLE companies ADD COLUMN gst_number VARCHAR(15)")
+        if "status" not in columns:
+            statements.append("ALTER TABLE companies ADD COLUMN status VARCHAR(50) DEFAULT 'Pending'")
+        if "created_at" not in columns:
+            statements.append("ALTER TABLE companies ADD COLUMN created_at DATETIME")
+
+        for stmt in statements:
+            db.session.execute(text(stmt))
+
+        if statements:
+            db.session.commit()
+
+    # ---------------- Fraud Detection Records Table ----------------
+    if "fraud_detection_records" in tables:
+        columns = {col["name"] for col in inspector.get_columns("fraud_detection_records")}
+        statements = []
+
+        if "features_used" not in columns:
+            statements.append("ALTER TABLE fraud_detection_records ADD COLUMN features_used TEXT")
+        if "status" not in columns:
+            statements.append("ALTER TABLE fraud_detection_records ADD COLUMN status VARCHAR(20) DEFAULT 'pending'")
+        if "fraud_reasons" not in columns:
+            statements.append("ALTER TABLE fraud_detection_records ADD COLUMN fraud_reasons TEXT")
+        if "classification" not in columns:
+            statements.append("ALTER TABLE fraud_detection_records ADD COLUMN classification VARCHAR(20)")
+        if "risk_score_pct" not in columns:
+            statements.append("ALTER TABLE fraud_detection_records ADD COLUMN risk_score_pct FLOAT DEFAULT 0")
+        if "is_fraud" not in columns:
+            statements.append("ALTER TABLE fraud_detection_records ADD COLUMN is_fraud BOOLEAN DEFAULT 0")
+        if "anomaly_score" not in columns:
+            statements.append("ALTER TABLE fraud_detection_records ADD COLUMN anomaly_score FLOAT DEFAULT 0")
+        if "reasons" not in columns:
+            statements.append("ALTER TABLE fraud_detection_records ADD COLUMN reasons TEXT")
+        if "scoring_breakdown_json" not in columns:
+            statements.append("ALTER TABLE fraud_detection_records ADD COLUMN scoring_breakdown_json TEXT")
+        if "layer1_format_json" not in columns:
+            statements.append("ALTER TABLE fraud_detection_records ADD COLUMN layer1_format_json TEXT")
+        if "layer3_web_json" not in columns:
+            statements.append("ALTER TABLE fraud_detection_records ADD COLUMN layer3_web_json TEXT")
+        if "ml_score" not in columns:
+            statements.append("ALTER TABLE fraud_detection_records ADD COLUMN ml_score FLOAT")
+        if "details_json" not in columns:
+            statements.append("ALTER TABLE fraud_detection_records ADD COLUMN details_json TEXT")
+        if "created_at" not in columns:
+            statements.append("ALTER TABLE fraud_detection_records ADD COLUMN created_at DATETIME")
+
+        for stmt in statements:
+            db.session.execute(text(stmt))
+
+        if statements:
+            db.session.commit()
+
+    # ---------------- Notification Table ----------------
+    if "notification" in tables:
+        columns = {col["name"] for col in inspector.get_columns("notification")}
+        statements = []
+
+        if "placement_id" not in columns:
+            statements.append("ALTER TABLE notification ADD COLUMN placement_id INTEGER")
 
         for stmt in statements:
             db.session.execute(text(stmt))
@@ -178,6 +323,7 @@ def create_app():
     app.config.from_object(Config)
 
     db.init_app(app)
+    mail.init_app(app)
 
     @app.before_request
     def track_request_start():
@@ -229,8 +375,16 @@ def create_app():
         return Admin.query.get(int(user_id))
 
     with app.app_context():
-        db.create_all()
-        run_startup_migrations()
+        global _DB_INIT_DONE
+        if (not _DB_INIT_DONE) and _should_run_startup_db_init(app):
+            try:
+                db.create_all()
+                run_startup_migrations()
+                _ensure_default_admin(app)
+                _DB_INIT_DONE = True
+            except Exception:
+                db.session.rollback()
+                raise
 
     return app
 

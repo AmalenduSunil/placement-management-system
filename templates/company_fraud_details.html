@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Fraud Details - Admin{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="header-section" style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="text-align: left;">
+            <div class="logo-circle" style="margin: 0;">CEC</div>
+            <h1 style="font-size: 1.8rem; margin-top: 10px;">Fraud Check Details</h1>
+            <p style="margin: 6px 0 0 0; opacity: 0.9;">{{ company.company_name }}</p>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+            <a href="{{ url_for('admin_companies') }}" class="dash-btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid white;">Back</a>
+            <a href="/admin/logout" class="dash-btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid white;">Logout</a>
+        </div>
+    </div>
+
+    <div class="feature-grid" style="margin-bottom: 24px;">
+        <div class="feature-card">
+            <i class="bi bi-shield-check"></i>
+            <h5>Classification</h5>
+            <h2 style="color: #ff69b4;">{{ record.classification }}</h2>
+        </div>
+        <div class="feature-card">
+            <i class="bi bi-speedometer2"></i>
+            <h5>Risk</h5>
+            <h2 style="color: #ff69b4;">{{ '%.2f'|format(record.risk_score_pct or 0) }}%</h2>
+        </div>
+        <div class="feature-card">
+            <i class="bi bi-cpu"></i>
+            <h5>ML Score</h5>
+            <h2 style="color: #ff69b4;">{{ '%.2f'|format(ml_score or 0) }}%</h2>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 20px;">
+        <div class="feature-card" style="text-align: left;">
+            <h4 style="margin-bottom: 12px;"><i class="bi bi-envelope-at" style="display:inline; font-size: 1.15rem;"></i> Email Validation</h4>
+            <p style="margin: 0; opacity: 0.95;"><b>Valid:</b> {{ email_validation.get('valid', '-') }}</p>
+            <p style="margin: 6px 0 0 0; opacity: 0.85;"><b>Reason:</b> {{ email_validation.get('reason', '-') }}</p>
+        </div>
+        <div class="feature-card" style="text-align: left;">
+            <h4 style="margin-bottom: 12px;"><i class="bi bi-receipt" style="display:inline; font-size: 1.15rem;"></i> GST Validation</h4>
+            <p style="margin: 0; opacity: 0.95;"><b>Valid:</b> {{ gst_validation.get('valid', '-') }}</p>
+            <p style="margin: 6px 0 0 0; opacity: 0.85;"><b>Reason:</b> {{ gst_validation.get('reason', '-') }}</p>
+        </div>
+    </div>
+
+    <div class="feature-card" style="text-align: left; margin-bottom: 28px;">
+        <h4 style="margin-bottom: 12px;"><i class="bi bi-globe2" style="display:inline; font-size: 1.15rem;"></i> Domain Age</h4>
+        <p style="margin: 0; opacity: 0.95;"><b>Age (days):</b> {{ domain_age.get('age_days', '-') }}</p>
+        <p style="margin: 6px 0 0 0; opacity: 0.95;"><b>New:</b> {{ domain_age.get('is_new', '-') }}</p>
+        <p style="margin: 6px 0 0 0; opacity: 0.85;"><b>Reason:</b> {{ domain_age.get('reason', '-') }}</p>
+    </div>
+
+    <div class="feature-card" style="text-align:left;">
+        <h4 style="margin-bottom: 12px;"><i class="bi bi-exclamation-triangle" style="display:inline; font-size: 1.15rem;"></i> Reasons</h4>
+        <p style="margin: 0; opacity: 0.9;">{{ record.fraud_reasons or record.reasons or '-' }}</p>
+    </div>
+</div>
+{% endblock %}
+

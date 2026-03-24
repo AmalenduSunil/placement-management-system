@@ -4,63 +4,123 @@
 {% block body_class %}edit-page{% endblock %}
 
 {% block content %}
-<div class="card" style="max-width: 600px;">
+<div class="card" style="max-width: 760px;">
     <div class="logo-circle">CEC</div>
     <h2>Edit Profile</h2>
     <p style="font-size: 0.9rem; margin-bottom: 25px; opacity: 0.8;">Keep your placement records up to date</p>
 
-    <form method="POST">
-        <div class="input-group">
-            <input type="text" name="name" id="name" value="{{ student.name }}" required placeholder=" ">
+        <form method="POST" enctype="multipart/form-data">
+            {% set f = form_data or {} %}
+            <div class="input-group">
+            <input type="text" name="name" id="name" value="{{ f.get('name', student.name) }}" required placeholder=" ">
             <label for="name">Full Name</label>
         </div>
 
+        <h3 style="margin: 14px 0 10px; text-align: left;">Academic Details</h3>
         <div class="input-group">
-            <input type="email" name="email" id="email" value="{{ student.email }}" required placeholder=" ">
+            <input type="text" name="register_number" id="register_number" value="{{ f.get('register_number', student.register_number or '') }}" required placeholder=" " pattern="CEC\d{2}[A-Z]{2}\d{3}">
+            <label for="register_number">Register/Roll Number</label>
+        </div>
+
+        <div class="input-group">
+            <input type="email" name="email" id="email" value="{{ f.get('email', student.email) }}" required placeholder=" ">
             <label for="email">Email Address</label>
         </div>
 
         <div class="input-group">
-            <input type="text" name="phone" id="phone" value="{{ student.phone or '' }}" placeholder=" ">
+            <input type="text" name="phone" id="phone" value="{{ f.get('phone', student.phone or '') }}" placeholder=" ">
             <label for="phone">Phone Number</label>
         </div>
 
         <div class="input-group">
-            <input type="text" name="department" id="department" value="{{ student.department or '' }}" placeholder=" ">
+            <input type="text" name="department" id="department" value="{{ f.get('department', student.department or '') }}" placeholder=" ">
             <label for="department">Department</label>
         </div>
 
         <div class="input-group">
-            <input type="number" min="0" name="number_of_arrears" id="number_of_arrears" value="{{ student.number_of_arrears if student.number_of_arrears is not none else 0 }}" placeholder=" ">
+            <input type="number" min="0" name="number_of_arrears" id="number_of_arrears" value="{{ f.get('number_of_arrears', student.number_of_arrears if student.number_of_arrears is not none else 0) }}" placeholder=" ">
             <label for="number_of_arrears">Number of Arrears</label>
         </div>
 
         <div style="display: flex; gap: 15px;">
             <div class="input-group" style="flex: 1;">
-                <input type="number" name="year" id="year" value="{{ student.year or '' }}" placeholder=" ">
+                <input type="number" name="year" id="year" value="{{ f.get('year', student.year or '') }}" placeholder=" ">
                 <label for="year">Year</label>
             </div>
             <div class="input-group" style="flex: 1;">
-                <input type="number" step="0.01" name="cgpa" id="cgpa" value="{{ student.cgpa or '' }}" placeholder=" ">
+                <input type="number" step="0.01" min="0" max="10" name="cgpa" id="cgpa" value="{{ f.get('cgpa', student.cgpa or '') }}" placeholder=" ">
                 <label for="cgpa">Current CGPA</label>
             </div>
         </div>
 
-        <h3 style="margin: 14px 0 10px; text-align: left;">Change Password (Optional)</h3>
+        <div style="display: flex; gap: 15px;">
+            <div class="input-group" style="flex: 1;">
+                <input type="number" step="0.01" min="0" max="100" name="tenth_percentage" id="tenth_percentage" value="{{ f.get('tenth_percentage', student.tenth_percentage or '') }}" required placeholder=" ">
+                <label for="tenth_percentage">10th Percentage</label>
+            </div>
+            <div class="input-group" style="flex: 1;">
+                <input type="number" step="0.01" min="0" max="100" name="twelfth_percentage" id="twelfth_percentage" value="{{ f.get('twelfth_percentage', student.twelfth_percentage or '') }}" required placeholder=" ">
+                <label for="twelfth_percentage">12th Percentage</label>
+            </div>
+        </div>
+
+        <h3 style="margin: 14px 0 10px; text-align: left;">Skills & Professional Details</h3>
         <div class="input-group">
-            <input type="password" name="current_password" id="current_password" placeholder=" ">
+            <textarea name="technical_skills" id="technical_skills" rows="3" placeholder=" ">{{ f.get('technical_skills', student.technical_skills or '') }}</textarea>
+            <label for="technical_skills">Technical Skills</label>
+        </div>
+
+        <div class="input-group">
+            <input type="text" name="programming_languages" id="programming_languages" value="{{ f.get('programming_languages', student.programming_languages or '') }}" placeholder=" ">
+            <label for="programming_languages">Programming Languages (comma-separated)</label>
+        </div>
+
+        <div class="input-group">
+            <input type="text" name="tools_technologies" id="tools_technologies" value="{{ f.get('tools_technologies', student.tools_technologies or '') }}" placeholder=" ">
+            <label for="tools_technologies">Tools & Technologies (comma-separated)</label>
+        </div>
+
+        <div class="input-group">
+            <textarea name="projects" id="projects" rows="3" placeholder=" ">{{ f.get('projects', student.projects or '') }}</textarea>
+            <label for="projects">Projects</label>
+        </div>
+
+        <div class="input-group">
+            <textarea name="internship_experience" id="internship_experience" rows="3" placeholder=" ">{{ f.get('internship_experience', student.internship_experience or '') }}</textarea>
+            <label for="internship_experience">Internship Experience (Optional)</label>
+        </div>
+
+        <div class="input-group">
+            <textarea name="certifications" id="certifications" rows="3" placeholder=" ">{{ f.get('certifications', student.certifications or '') }}</textarea>
+            <label for="certifications">Certifications</label>
+        </div>
+
+        <div class="input-group">
+            <input type="file" name="resume_pdf" id="resume_pdf" accept=".pdf,application/pdf">
+            <label for="resume_pdf" style="top: -10px; transform: none; font-size: 0.75rem; color: #ff69b4; font-weight: 600;">Resume Upload (PDF only)</label>
+        </div>
+        {% if student.resume_pdf_path %}
+        <p style="font-size: 0.8rem; opacity: 0.85; text-align: left; margin-top: -12px; margin-bottom: 14px;">
+            Current Resume:
+            <a href="{{ url_for('static', filename=student.resume_pdf_path) }}" target="_blank" style="color: #ffffff; text-decoration: underline;">View PDF</a>
+        </p>
+        {% endif %}
+
+         <h3 style="margin: 14px 0 10px; text-align: left;">Change Password (Optional)</h3>
+         <div class="input-group">
+            <input type="password" name="current_password" id="current_password" placeholder=" " autocomplete="current-password">
             <label for="current_password">Current Password</label>
-        </div>
-
-        <div class="input-group">
-            <input type="password" name="new_password" id="new_password" placeholder=" ">
+         </div>
+ 
+         <div class="input-group">
+            <input type="password" name="new_password" id="new_password" placeholder=" " autocomplete="new-password">
             <label for="new_password">New Password</label>
-        </div>
-
-        <div class="input-group">
-            <input type="password" name="confirm_password" id="confirm_password" placeholder=" ">
+         </div>
+ 
+         <div class="input-group">
+            <input type="password" name="confirm_password" id="confirm_password" placeholder=" " autocomplete="new-password">
             <label for="confirm_password">Confirm New Password</label>
-        </div>
+         </div>
         <p style="font-size: 0.75rem; opacity: 0.8; text-align: left; margin-top: -8px; margin-bottom: 14px;">
             Strong password: 8+ chars with uppercase, lowercase, number, and special character.
         </p>

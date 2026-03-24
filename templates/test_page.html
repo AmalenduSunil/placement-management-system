@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Start Test - CEC{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="header-section" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+        <div style="text-align:left;">
+            <h2>{{ test.title }}</h2>
+            <p class="tagline">{{ test.description or "Answer all questions and submit." }}</p>
+            <p class="tagline" style="margin-bottom:0;"><strong>Duration:</strong> {{ test.duration }} minutes</p>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+            <span class="dash-btn" style="cursor:default;">Time Left: <strong id="timeLeftLabel">00:00</strong></span>
+            <a href="{{ url_for('mock_tests') }}" class="dash-btn">&larr; Back to Tests</a>
+        </div>
+    </div>
+
+    {% if grouped_questions %}
+    <form method="POST" action="{{ url_for('submit_test', test_id=test.id) }}" id="testForm">
+        <input type="hidden" name="attempt_question_ids" value="{{ attempt_question_ids|join(',') }}">
+        {% set q_counter = namespace(value=1) %}
+        {% for section_name in section_order %}
+        {% set section_questions = grouped_questions.get(section_name, []) %}
+        {% if section_questions %}
+        <div class="feature-card" style="text-align:left; margin-bottom: 14px;">
+            {% if section_name == "Aptitude" %}
+            <h4 style="margin-bottom: 12px;">Placement-Level Aptitude Questions ({{ section_questions|length }})</h4>
+            {% else %}
+            <h4 style="margin-bottom: 12px;">{{ section_name }} Questions ({{ section_questions|length }})</h4>
+            {% endif %}
+            {% for q in section_questions %}
+            <div style="padding: 8px 0; border-top: 1px solid rgba(255,255,255,0.08);">
+                <p><strong>Q{{ q_counter.value }}. {{ q.question_text }}</strong></p>
+                <label><input type="radio" name="q{{ q.id }}" value="A" required> {{ q.option_a }}</label><br>
+                <label><input type="radio" name="q{{ q.id }}" value="B"> {{ q.option_b }}</label><br>
+                <label><input type="radio" name="q{{ q.id }}" value="C"> {{ q.option_c }}</label><br>
+                <label><input type="radio" name="q{{ q.id }}" value="D"> {{ q.option_d }}</label>
+            </div>
+            {% set q_counter.value = q_counter.value + 1 %}
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endfor %}
+        <button type="submit" class="submit-btn">Submit</button>
+    </form>
+    {% else %}
+    <div class="feature-card" style="text-align:left;">
+        <p>No questions available for this test yet.</p>
+    </div>
+    {% endif %}
+</div>
+<script>
+const durationMinutes = Number({{ (test.duration or 0) | tojson }});
+const totalSeconds = Math.max(0, durationMinutes * 60);
+const label = document.getElementById("timeLeftLabel");
+const form = document.getElementById("testForm");
+let remaining = totalSeconds;
+
+function formatMMSS(value) {
+    const mm = String(Math.floor(value / 60)).padStart(2, "0");
+    const ss = String(value % 60).padStart(2, "0");
+    return `${mm}:${ss}`;
+}
+
+if (label) {
+    label.textContent = formatMMSS(remaining);
+}
+
+if (form && remaining > 0) {
+    const timer = setInterval(() => {
+        remaining -= 1;
+        if (label) {
+            label.textContent = formatMMSS(Math.max(0, remaining));
+        }
+        if (remaining <= 0) {
+            clearInterval(timer);
+            form.submit();
+        }
+    }, 1000);
+}
+</script>
+{% endblock %}

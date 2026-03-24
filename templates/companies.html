@@ -1,0 +1,280 @@
+{% extends "base.html" %}
+
+{% block title %}Companies - Admin{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="header-section" style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="text-align: left;">
+            <div class="logo-circle" style="margin: 0;">CEC</div>
+            <h1 style="font-size: 1.8rem; margin-top: 10px;">Company Registration (Fraud Checks)</h1>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+            <a href="{{ url_for('admin_dashboard') }}" class="dash-btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid white;">Back</a>
+            <a href="/admin/logout" class="dash-btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid white;">Logout</a>
+        </div>
+    </div>
+
+    <div class="chart-container" style="height: auto; min-height: 200px; margin-bottom: 30px;">
+        <h3 style="margin-bottom: 20px;">Register / Verify Company</h3>
+        <form method="POST" action="{{ url_for('admin_add_company') }}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px;">
+            <div class="input-group">
+                <input type="text" name="company_name" required placeholder=" ">
+                <label>Company Name</label>
+            </div>
+            <div class="input-group">
+                <input type="text" name="industry" placeholder=" ">
+                <label>Industry</label>
+            </div>
+            <div class="input-group">
+                <input type="text" name="contact_person" placeholder=" ">
+                <label>Contact Person</label>
+            </div>
+            <div class="input-group">
+                <input type="email" name="contact_email" placeholder=" ">
+                <label>Contact Email</label>
+            </div>
+            <div class="input-group">
+                <input type="tel" name="contact_phone" placeholder=" ">
+                <label>Contact Phone</label>
+            </div>
+            <div class="input-group">
+                <input type="url" name="website" placeholder=" ">
+                <label>Website (https://...)</label>
+            </div>
+            <div class="input-group">
+                <input type="text" name="registration_number" placeholder=" ">
+                <label>Registration Number</label>
+            </div>
+            <div class="input-group">
+                <input type="text" name="gst_number" placeholder=" ">
+                <label>GST Number</label>
+            </div>
+            <div class="input-group">
+                <input type="number" min="0" step="0.1" name="salary_package" placeholder=" ">
+                <label>Salary Package (LPA)</label>
+            </div>
+            <div class="input-group">
+                <input type="number" min="0" name="previous_history" value="0" placeholder=" ">
+                <label>Previous Drives</label>
+            </div>
+            <div class="input-group" style="grid-column: 1 / -1;">
+                <input type="text" name="address" placeholder=" ">
+                <label>Address</label>
+            </div>
+            <div class="input-group" style="grid-column: 1 / -1;">
+                <textarea name="description" placeholder=" " style="width: 100%; min-height: 90px; padding: 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); color: white;"></textarea>
+                <label style="position: relative; top: -6px;">Description</label>
+            </div>
+            <div style="grid-column: 1 / -1; text-align: center;">
+                <button type="submit" class="submit-btn" style="width: 320px; margin: 0 auto;">Run Fraud Check & Save</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="feature-card" style="text-align: left; overflow-x: auto; margin-bottom: 40px;">
+        <h4 style="margin-bottom: 15px;"><i class="bi bi-building" style="display: inline; font-size: 1.2rem;"></i> Recent Companies</h4>
+        {% if companies %}
+        <table style="width: 100%; border-collapse: collapse; color: white; font-size: 0.85rem;">
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                <th style="padding: 10px 5px; text-align: left;">Company</th>
+                <th style="padding: 10px 5px; text-align: left;">Status</th>
+                <th style="padding: 10px 5px; text-align: left;">Classification</th>
+                <th style="padding: 10px 5px; text-align: left;">Risk %</th>
+                <th style="padding: 10px 5px; text-align: left;">Reasons</th>
+                <th style="padding: 10px 5px; text-align: left;">Action</th>
+            </tr>
+            {% for c in companies %}
+                {% set r = latest_by_company.get(c.id) %}
+                <tr data-company-id="{{ c.id }}" style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 10px 5px;">{{ c.company_name }}</td>
+                    <td class="js-company-status" style="padding: 10px 5px;">{{ c.status or '-' }}</td>
+                    <td class="js-classification" style="padding: 10px 5px;">
+                        {% if r %}
+                            {% if r.classification == 'legitimate' %}
+                                🟢 <span style="color:#4ade80;">legitimate</span>
+                            {% elif r.classification == 'suspicious' %}
+                                🟡 <span style="color:#facc15;">suspicious</span>
+                            {% elif r.classification == 'fraud' %}
+                                🔴 <span style="color:#f87171;">fraud</span>
+                            {% elif r.classification == 'pending' %}
+                                <span style="color:rgba(255,255,255,0.75);">pending</span>
+                            {% elif r.classification == 'error' %}
+                                <span style="color:#f87171;">error</span>
+                            {% else %}
+                                {{ r.classification }}
+                            {% endif %}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td class="js-risk" style="padding: 10px 5px;">
+                        {% if r and r.risk_score_pct is not none %}
+                            {% set risk = r.risk_score_pct %}
+                            {% if risk < 0 %}{% set risk = 0 %}{% endif %}
+                            {% if risk > 100 %}{% set risk = 100 %}{% endif %}
+                            {% set risk_class = 'risk-green' %}
+                            {% if risk >= 70 %}
+                                {% set risk_class = 'risk-red' %}
+                            {% elif risk >= 30 %}
+                                {% set risk_class = 'risk-yellow' %}
+                            {% endif %}
+                            {% if r.classification == 'pending' %}{% set risk_class = 'risk-gray' %}{% endif %}
+                            {% if r.classification == 'error' %}{% set risk_class = 'risk-red' %}{% endif %}
+
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <div class="risk-bar" title="Risk: {{ '%.2f'|format(risk) }}%">
+                                    <div class="risk-fill {{ risk_class }}" style="width: {{ '%.2f'|format(risk) }}%;"></div>
+                                </div>
+                                <span style="min-width: 48px;">{{ '%d'|format(risk|round(0, 'common')|int) }}%</span>
+                            </div>
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td class="js-reasons" style="padding: 10px 5px; max-width: 420px; opacity: 0.95;">{{ r.reasons if r else '-' }}</td>
+                    <td style="padding: 10px 5px;">
+                        <a href="{{ url_for('admin_company_fraud_details', company_id=c.id) }}" class="dash-btn" style="padding: 8px 12px; margin-right: 10px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25);">
+                            View Details
+                        </a>
+                        <a href="{{ url_for('admin_edit_company', company_id=c.id) }}" class="dash-btn" style="padding: 8px 12px; margin-right: 10px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25);">
+                            Edit
+                        </a>
+                        <form method="POST" action="{{ url_for('admin_delete_company', company_id=c.id) }}" style="display:inline;" onsubmit="return confirm('Delete this company and all fraud records?');">
+                            <button type="submit" style="background: none; border: none; color: #ffb7b7; text-decoration: none; font-weight: 600; cursor: pointer; padding: 0;">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+            <p style="opacity: 0.85;">No companies registered yet.</p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+(() => {
+    const endpoint = "{{ url_for('admin_companies_status') }}";
+    const fastPollMs = 200;
+    const slowPollMs = 2000;
+    const fastWindowMs = 5000;
+    let inFlight = false;
+    const startTs = Date.now();
+
+    function getRows() {
+        return Array.from(document.querySelectorAll("tr[data-company-id]"));
+    }
+
+    function getIds() {
+        // Poll only rows that aren't confirmed as full/error yet.
+        return getRows()
+            .filter((tr) => {
+                const stage = (tr.dataset.analysisStage || "").toLowerCase();
+                return stage !== "full" && stage !== "error";
+            })
+            .map((tr) => tr.getAttribute("data-company-id"))
+            .filter(Boolean);
+    }
+
+    function classificationMarkup(value) {
+        const v = (value || "").toLowerCase();
+        if (!v) return "-";
+        if (v === "legitimate") return "&#128994; <span style=\"color:#4ade80;\">legitimate</span>";
+        if (v === "suspicious") return "&#128993; <span style=\"color:#facc15;\">suspicious</span>";
+        if (v === "fraud") return "&#128308; <span style=\"color:#f87171;\">fraud</span>";
+        if (v === "pending") return "<span style=\"color:rgba(255,255,255,0.75);\">pending</span>";
+        if (v === "error") return "<span style=\"color:#f87171;\">error</span>";
+        return `<span>${v}</span>`;
+    }
+
+    function riskMarkup(riskPct, classification) {
+        if (riskPct === null || riskPct === undefined || Number.isNaN(Number(riskPct))) {
+            return "-";
+        }
+        let risk = Number(riskPct);
+        if (risk < 0) risk = 0;
+        if (risk > 100) risk = 100;
+
+        let riskClass = "risk-green";
+        if (risk >= 70) riskClass = "risk-red";
+        else if (risk >= 30) riskClass = "risk-yellow";
+
+        const c = (classification || "").toLowerCase();
+        if (c === "pending") riskClass = "risk-gray";
+        if (c === "error") riskClass = "risk-red";
+
+        const width = risk.toFixed(2);
+        const label = `${Math.round(risk)}%`;
+
+        return `
+            <div style="display:flex; align-items:center; gap:10px;">
+                <div class="risk-bar" title="Risk: ${width}%">
+                    <div class="risk-fill ${riskClass}" style="width: ${width}%;"></div>
+                </div>
+                <span style="min-width: 48px;">${label}</span>
+            </div>
+        `;
+    }
+
+    function applyUpdate(tr, data) {
+        const statusTd = tr.querySelector(".js-company-status");
+        const classTd = tr.querySelector(".js-classification");
+        const riskTd = tr.querySelector(".js-risk");
+        const reasonsTd = tr.querySelector(".js-reasons");
+
+        if (data && data.analysis_stage) tr.dataset.analysisStage = String(data.analysis_stage);
+        if (statusTd) statusTd.textContent = (data.company_status || "-");
+        if (classTd) classTd.innerHTML = classificationMarkup(data.classification);
+        if (riskTd) riskTd.innerHTML = riskMarkup(data.risk_score_pct, data.classification);
+        if (reasonsTd) reasonsTd.textContent = (data.reasons || "-");
+    }
+
+    async function pollOnce() {
+        if (inFlight) return;
+        const ids = getIds();
+        if (!ids.length) return;
+
+        inFlight = true;
+        try {
+            const resp = await fetch(`${endpoint}?ids=${encodeURIComponent(ids.join(","))}`, {
+                headers: { "Accept": "application/json" }
+            });
+            if (!resp.ok) return;
+            const json = await resp.json();
+            const map = (json && json.companies) ? json.companies : {};
+
+            for (const tr of getRows()) {
+                const id = tr.getAttribute("data-company-id");
+                const data = map && id ? map[id] : null;
+                if (data) applyUpdate(tr, data);
+            }
+        } catch (e) {
+            // ignore transient polling errors
+        } finally {
+            inFlight = false;
+        }
+    }
+
+    async function loop() {
+        await pollOnce();
+        const now = Date.now();
+        const rows = getRows();
+        const hasPending = rows.some((tr) => {
+            const stage = (tr.dataset.analysisStage || "").toLowerCase();
+            return stage !== "full" && stage !== "error";
+        });
+
+        const delay = (now - startTs < fastWindowMs || hasPending) ? fastPollMs : slowPollMs;
+        setTimeout(loop, delay);
+    }
+
+    // Ensure we poll at least once even before any stage is known.
+    for (const tr of getRows()) tr.dataset.analysisStage = tr.dataset.analysisStage || "unknown";
+    loop();
+})();
+</script>
+{% endblock %}

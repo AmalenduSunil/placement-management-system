@@ -1,0 +1,233 @@
+.resume-enhancer-page .role-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.resume-enhancer-page .role-chip {
+  padding: 7px 12px;
+  border-radius: 50px;
+  cursor: pointer;
+  user-select: none;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: 0.25s;
+}
+
+.resume-enhancer-page .role-chip:hover,
+.resume-enhancer-page .role-chip.active {
+  background: rgba(255, 105, 180, 0.22);
+  border-color: rgba(255, 105, 180, 0.7);
+}
+
+.resume-enhancer-page .drop-zone {
+  position: relative;
+  border: 2px dashed rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.resume-enhancer-page .drop-zone.drag-over {
+  border-color: #ff69b4;
+  background: rgba(255, 105, 180, 0.1);
+}
+
+.resume-enhancer-page .drop-zone input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.resume-enhancer-page .drop-inner {
+  padding: 38px 22px;
+  text-align: center;
+}
+
+.resume-enhancer-page .drop-icon {
+  font-size: 2.2rem;
+  color: #ff69b4;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.resume-enhancer-page .file-types {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.resume-enhancer-page .file-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.resume-enhancer-page .file-badge-disabled {
+  opacity: 0.45;
+  filter: grayscale(1);
+}
+
+.resume-enhancer-page .selected-file {
+  display: none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(22, 163, 74, 0.25);
+  border: 1px solid rgba(22, 163, 74, 0.4);
+  color: #fff;
+  justify-content: center;
+  gap: 8px;
+}
+
+.resume-enhancer-page .resume-enhance-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.resume-enhancer-page .spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: resumeEnhancerSpin 0.7s linear infinite;
+  display: none;
+}
+
+@keyframes resumeEnhancerSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.resume-enhancer-page .kw-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.resume-enhancer-page .pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.resume-enhancer-page .pill-ok {
+  border-color: rgba(22, 163, 74, 0.5);
+  background: rgba(22, 163, 74, 0.2);
+}
+
+.resume-enhancer-page .pill-bad {
+  border-color: rgba(220, 38, 38, 0.55);
+  background: rgba(220, 38, 38, 0.18);
+}
+
+.resume-enhancer-page .pill-warn {
+  border-color: rgba(217, 119, 6, 0.55);
+  background: rgba(217, 119, 6, 0.18);
+}
+
+.resume-enhancer-page .score-bar {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.resume-enhancer-page .score-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.resume-enhancer-page .actions-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.resume-enhancer-page .fixes-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-left: 0;
+  margin: 0;
+}
+
+.resume-enhancer-page .fixes-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  opacity: 0.95;
+}
+
+.resume-enhancer-page .fix-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 105, 180, 0.18);
+  border: 1px solid rgba(255, 105, 180, 0.45);
+  color: #fff;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.resume-enhancer-page .toast {
+  position: fixed;
+  bottom: 18px;
+  right: 18px;
+  z-index: 9999;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(22, 163, 74, 0.6);
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  transform: translateY(80px);
+  opacity: 0;
+  transition: transform 0.35s, opacity 0.35s;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.resume-enhancer-page .toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}

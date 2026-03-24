@@ -1,44 +1,141 @@
-section,question_text,option_a,option_b,option_c,option_d,correct_answer
-Aptitude,What is 15 + 27?,40,41,42,43,42
-Aptitude,What is 12 * 8?,84,96,88,92,96
-Aptitude,What is 100 / 5?,10,20,25,30,20
-Aptitude,What is 25% of 200?,25,40,50,60,50
-Aptitude,What is the square of 9?,72,81,90,99,81
-Aptitude,What is 45 - 19?,24,25,26,27,26
-Aptitude,What is the average of 10,20,30?,15,20,25,30,20
-Aptitude,What is 7 * 6?,36,40,42,48,42
-Aptitude,What is 64 / 8?,6,7,8,9,8
-Aptitude,What is the cube of 3?,6,9,18,27,27
-
-Logical,Find the next number: 2 4 6 8 ?,9,10,11,12,10
-Logical,Find the next number: 3 6 9 12 ?,14,15,16,18,15
-Logical,Find the next number: 1 4 9 16 ?,20,21,25,36,25
-Logical,Odd one out,Apple,Banana,Car,Mango,Car
-Logical,Which is different?,Cow,Dog,Tiger,Car,Car
-Logical,Find next letter: A C E G ?,H,I,J,K,I
-Logical,If A=1 B=2 C=3 then CAB=?,123,213,231,312,312
-Logical,If 5 → 25 and 6 → 36 then 7 → ?,42,49,56,63,49
-Logical,Find the missing number: 5 10 20 40 ?,60,70,80,90,80
-Logical,Odd one out among shapes,Circle,Square,Triangle,Banana,Banana
-
-Technical,Which language is mainly used for web development?,Python,JavaScript,C,Java,JavaScript
-Technical,Which data structure uses FIFO?,Stack,Queue,Tree,Graph,Queue
-Technical,Which keyword defines a function in Python?,func,function,def,define,def
-Technical,Which language is used to query databases?,SQL,HTML,CSS,XML,SQL
-Technical,Which symbol is used for comments in Python?,//,#,<!--,**,#
-Technical,Which data structure uses LIFO?,Queue,Stack,Tree,Graph,Stack
-Technical,Which company created Python?,Google,Microsoft,Guido van Rossum,Apple,Guido van Rossum
-Technical,Which keyword creates a class in Python?,function,class,define,struct,class
-Technical,What does HTML stand for?,Hyper Trainer Marking Language,Hyper Text Markup Language,Hyper Text Marketing Language,Hyper Tool Multi Language,Hyper Text Markup Language
-Technical,Which database type is MySQL?,Relational,NoSQL,Graph,Document,Relational
-
-Coding,What is the output of print(2+3*4)?,20,14,24,10,14
-Coding,What is the output of len('Hello')?,4,5,6,7,5
-Coding,Which loop repeats until a condition becomes false?,for,while,switch,case,while
-Coding,Which data type stores True or False?,int,string,boolean,float,boolean
-Coding,Which operator checks equality in Python?,=,==,!=,>=,==
-Coding,What is the output of print(10//3)?,3,3.33,4,5,3
-Coding,Which keyword is used to exit a loop?,stop,exit,break,return,break
-Coding,Which function prints output in Python?,echo,print,display,write,print
-Coding,Which keyword imports a module in Python?,include,require,import,load,import
-Coding,What is the output of print(3**2)?,6,9,12,15,9
+section,question_text,option_a,option_b,option_c,option_d,correct_answer,difficulty,topic,time_limit,weight,company_level
+Aptitude,What is 15 + 27?,40,41,42,43,42,,,,,
+Aptitude,What is 12 * 8?,84,96,88,92,96,,,,,
+Aptitude,What is 100 / 5?,10,20,25,30,20,,,,,
+Aptitude,What is 25% of 200?,25,40,50,60,50,,,,,
+Aptitude,What is the square of 9?,72,81,90,99,81,,,,,
+Aptitude,What is 45 - 19?,24,25,26,27,26,,,,,
+Aptitude,"What is the average of 10,20,30?",15,20,25,30,20,,,,,
+Aptitude,What is 7 * 6?,36,40,42,48,42,,,,,
+Aptitude,What is 64 / 8?,6,7,8,9,8,,,,,
+Aptitude,What is the cube of 3?,6,9,18,27,27,,,,,
+Logical,Find the next number: 2 4 6 8 ?,9,10,11,12,10,,,,,
+Logical,Find the next number: 3 6 9 12 ?,14,15,16,18,15,,,,,
+Logical,Find the next number: 1 4 9 16 ?,20,21,25,36,25,,,,,
+Logical,Odd one out,Apple,Banana,Car,Mango,Car,,,,,
+Logical,Which is different?,Cow,Dog,Tiger,Car,Car,,,,,
+Logical,Find next letter: A C E G ?,H,I,J,K,I,,,,,
+Logical,If A=1 B=2 C=3 then CAB=?,123,213,231,312,312,,,,,
+Logical,If 5 â†’ 25 and 6 â†’ 36 then 7 â†’ ?,42,49,56,63,49,,,,,
+Logical,Find the missing number: 5 10 20 40 ?,60,70,80,90,80,,,,,
+Logical,Odd one out among shapes,Circle,Square,Triangle,Banana,Banana,,,,,
+Technical,Which language is mainly used for web development?,Python,JavaScript,C,Java,JavaScript,,,,,
+Technical,Which data structure uses FIFO?,Stack,Queue,Tree,Graph,Queue,,,,,
+Technical,Which keyword defines a function in Python?,func,function,def,define,def,,,,,
+Technical,Which language is used to query databases?,SQL,HTML,CSS,XML,SQL,,,,,
+Technical,Which symbol is used for comments in Python?,//,#,<!--,**,#,,,,,
+Technical,Which data structure uses LIFO?,Queue,Stack,Tree,Graph,Stack,,,,,
+Technical,Which company created Python?,Google,Microsoft,Guido van Rossum,Apple,Guido van Rossum,,,,,
+Technical,Which keyword creates a class in Python?,function,class,define,struct,class,,,,,
+Technical,What does HTML stand for?,Hyper Trainer Marking Language,Hyper Text Markup Language,Hyper Text Marketing Language,Hyper Tool Multi Language,Hyper Text Markup Language,,,,,
+Technical,Which database type is MySQL?,Relational,NoSQL,Graph,Document,Relational,,,,,
+Coding,What is the output of print(2+3*4)?,20,14,24,10,14,,,,,
+Coding,What is the output of len('Hello')?,4,5,6,7,5,,,,,
+Coding,Which loop repeats until a condition becomes false?,for,while,switch,case,while,,,,,
+Coding,Which data type stores True or False?,int,string,boolean,float,boolean,,,,,
+Coding,Which operator checks equality in Python?,=,==,!=,>=,==,,,,,
+Coding,What is the output of print(10//3)?,3,3.33,4,5,3,,,,,
+Coding,Which keyword is used to exit a loop?,stop,exit,break,return,break,,,,,
+Coding,Which function prints output in Python?,echo,print,display,write,print,,,,,
+Coding,Which keyword imports a module in Python?,include,require,import,load,import,,,,,
+Coding,What is the output of print(3**2)?,6,9,12,15,9,,,,,
+Aptitude,A and B can complete a task in 12 days and 18 days. How many days will they take together?,7.2 days,8 days,9 days,6 days,A,hard,Time and Work,120,3,Infosys
+Aptitude,A sum becomes double in 8 years at simple interest. What is the annual rate?,10%,12.5%,15%,8%,B,medium,Simple Interest,90,2,TCS
+Aptitude,If 40% of a number is 72 what is the number?,160,170,180,200,C,medium,Percentages,90,2,Wipro
+Aptitude,What is the probability of getting a prime number on a fair die?,1/3,1/2,2/3,1/6,B,medium,Probability,90,2,Infosys
+Aptitude,Two trains of lengths 150 m and 200 m move opposite at 60 km/h and 45 km/h. Time to cross each other?,10 s,12 s,14 s,16 s,B,hard,Speed and Distance,120,3,TCS
+Aptitude,What is the compound interest on 10000 at 10% per annum for 2 years?,2000,2100,2200,2500,B,medium,Compound Interest,90,2,Wipro
+Aptitude,If x:y is 3:5 and y:z is 10:7 then what is x:z?,6:7,3:7,7:6,5:7,A,hard,Ratios,120,3,Infosys
+Aptitude,What is the HCF of 84 and 126?,21,42,14,63,B,medium,Number System,90,2,TCS
+Aptitude,A shopkeeper marks 25% above cost and gives 10% discount. What is the profit percent?,12.5%,10%,15%,8%,A,hard,Profit and Loss,120,3,Wipro
+Aptitude,A alone finishes a work in 15 days. B is 20% faster. How many days will they take together?,6.82 days,7.5 days,8.5 days,5.5 days,A,hard,Time and Work,120,3,Infosys
+Aptitude,What is the value of log base 10 of 1000?,2,3,4,1,B,medium,Logarithms,90,2,TCS
+Aptitude,In how many ways can 5 people sit in a row if two specific people must sit together?,24,48,72,96,B,hard,Permutations,120,3,Wipro
+Aptitude,A mixture has milk to water ratio 7:3. How much water must be added to 10 L to make the ratio 7:5?,1 L,2 L,3 L,4 L,B,medium,Mixtures,90,2,Infosys
+Aptitude,A number is increased by 20% and then decreased by 20%. What is the net change?,4% decrease,4% increase,0%,2% decrease,A,hard,Percentages,120,3,TCS
+Aptitude,What is the sum of first 20 natural numbers?,200,210,220,230,B,medium,Arithmetic Series,90,2,Wipro
+Aptitude,A pipe fills a tank in 6 hours and another empties it in 9 hours. How long to fill the tank together?,18 hours,15 hours,12 hours,9 hours,A,hard,Pipes and Cisterns,120,3,Infosys
+Aptitude,If sin theta is 3/5 and theta is acute then what is cos theta?,4/5,5/4,3/4,1/5,A,medium,Trigonometry,90,2,TCS
+Aptitude,What is the remainder when 7^100 is divided by 6?,0,1,3,5,B,hard,Modular Arithmetic,120,3,Wipro
+Aptitude,A types 600 words in 10 minutes. B types 20% slower. How long will they take to type 1800 words together?,16 min 40 s,15 min,18 min,20 min,A,hard,Work Rate,120,3,Infosys
+Aptitude,An article is sold at 20% loss for 640. What is the cost price?,800,820,780,900,A,medium,Profit and Loss,90,2,TCS
+Aptitude,What is the LCM of 12 15 and 20?,30,60,120,180,B,medium,Number System,90,2,Wipro
+Aptitude,A rectangle has perimeter 50 and length 15. What is its area?,150,160,140,180,A,medium,Mensuration,90,2,Infosys
+Aptitude,If 3x minus 7 equals 11 then what is x?,5,6,7,8,B,medium,Algebra,90,2,TCS
+Aptitude,Average of 8 numbers is 15. If 23 is replaced by 31 what is the new average?,15,16,17,18,B,medium,Averages,90,2,Wipro
+Aptitude,A and B invest 20000 and 30000. Total profit is 25000. What is A share of profit?,9000,10000,11000,15000,B,medium,Partnership,90,2,Infosys
+Logical,Find the next term in series 5 11 23 47 ?,93,95,97,99,B,hard,Number Series,120,3,Infosys
+Logical,All programmers are logical. Some logical people are designers. Conclusion: Some designers are programmers.,True,False,Cannot be concluded,Both true and false,C,medium,Syllogism,90,2,TCS
+Logical,If letters are coded as positions then MATH is 131208. What is CODE?,03150405,03051405,03150504,03051504,A,hard,Coding and Decoding,120,3,Wipro
+Logical,A walks 10 m north then 6 m east then 10 m south. How far is he from start?,6 m,10 m,14 m,20 m,A,medium,Directions,90,2,Infosys
+Logical,Pointing to a man a woman says he is the son of my grandfathers only son. How is the man related to the woman?,Brother,Uncle,Cousin,Nephew,A,medium,Blood Relations,90,2,TCS
+Logical,In a row P is left of Q and right of R. S is right of Q. Who is between R and Q?,P,Q,R,S,A,medium,Arrangements,90,2,Wipro
+Logical,Statement: The company should conduct coding tests. Assumption: Coding tests measure programming skill.,Assumption is implicit,Assumption is not implicit,Both implicit,Either implicit,A,hard,Critical Reasoning,120,3,Infosys
+Logical,If all A are B and no B are C then which statement is true?,Some A are C,No A are C,All C are A,Cannot be concluded,B,medium,Venn Diagram,90,2,TCS
+Logical,Choose the odd one out: 2 3 5 9,2,3,5,9,D,medium,Primes,90,2,Wipro
+Logical,Find the next term in letter series AZ BY CX DW ?,EV,EU,FV,EW,A,hard,Letter Series,120,3,Infosys
+Logical,If 3 cats catch 3 mice in 3 minutes then how many cats catch 100 mice in 100 minutes?,1,3,9,33,B,hard,Work Rate,120,3,TCS
+Logical,Data sufficiency: What is x? I: x+5=17 II: 2x=24,I alone is sufficient,II alone is sufficient,Either I or II alone is sufficient,Both together are needed,C,medium,Data Sufficiency,90,2,Wipro
+Logical,CPU is to Computer as Heart is to ?,Brain,Body,Blood,Cell,B,medium,Analogy,90,2,Infosys
+Logical,Find the missing number in series 2 6 12 20 ?,28,30,32,34,B,medium,Number Series,90,2,TCS
+Logical,What is the angle between hour and minute hands at 3:30?,60 degrees,75 degrees,90 degrees,105 degrees,B,hard,Clocks,120,3,Wipro
+Logical,If 1 Jan 2026 is Thursday then what day is 1 Feb 2026?,Sunday,Monday,Tuesday,Wednesday,A,medium,Calendars,90,2,Infosys
+Logical,All laptops are devices. All devices are expensive. Conclusion: All laptops are expensive.,True,False,Cannot be concluded,Either true or false,A,medium,Syllogism,90,2,TCS
+Logical,Find the next group in pattern ACE BDF CEG ?,DFH,DEH,CEH,DGH,A,medium,Letter Patterns,90,2,Wipro
+Logical,If SMART is coded as TNBSU using +1 shift then what is code for HARD?,IBSE,HBSE,IBSD,JCSE,A,medium,Coding and Decoding,90,2,Infosys
+Logical,How many rectangles are there in a 2 by 3 grid of squares?,12,18,24,30,B,hard,Counting Figures,120,3,TCS
+Logical,Find the next term in series 1 2 6 24 120 ?,600,720,840,960,B,medium,Number Series,90,2,Wipro
+Logical,Some students are coders. All coders are logical. Conclusion: Some students are logical.,True,False,Cannot be concluded,Either true or false,A,medium,Syllogism,90,2,Infosys
+Logical,You are facing east. Turn left then right then right. Which direction are you facing now?,North,South,East,West,B,medium,Directions,90,2,TCS
+Logical,If today is Monday then after 45 days it will be?,Tuesday,Wednesday,Thursday,Friday,C,medium,Calendars,90,2,Wipro
+Logical,9 is to 81 as 8 is to ?,56,64,72,88,B,medium,Analogy,90,2,Infosys
+Technical,Which normal form removes partial dependency?,1NF,2NF,3NF,BCNF,B,medium,DBMS,90,2,Infosys
+Technical,What is the time complexity of binary search on a sorted array?,O(n),O(log n),O(n log n),O(1),B,medium,Data Structures,90,2,TCS
+Technical,Which scheduling algorithm can cause starvation?,FCFS,Round Robin,Priority Scheduling,FIFO,C,hard,Operating Systems,120,3,Wipro
+Technical,TCP primarily provides which feature?,Best effort delivery,Reliable ordered delivery,Broadcast only,Connectionless,B,medium,Networking,90,2,Infosys
+Technical,In SQL which clause filters aggregated results?,WHERE,GROUP BY,HAVING,ORDER BY,C,medium,SQL,90,2,TCS
+Technical,Which approach supports O(1) LRU cache operations?,Stack,Queue,Hash map with doubly linked list,Binary tree,C,hard,Data Structures,120,3,Wipro
+Technical,What does ACID stand for?,Atomicity Consistency Isolation Durability,Access Control Integrity Data,Atomicity Concurrency Isolation Durability,Allocation Consistency Index Durability,A,medium,DBMS,90,2,Infosys
+Technical,Which HTTP status code means Unauthorized?,200,301,401,500,C,medium,Web,90,2,TCS
+Technical,Same function name with different signatures is called?,Inheritance,Encapsulation,Overloading,Abstraction,C,medium,OOP,90,2,Wipro
+Technical,In Python what is the type of 3/2?,int,float,str,bool,B,medium,Python,90,2,Infosys
+Technical,Which OSI layer handles routing?,Transport,Network,Data Link,Session,B,medium,Networking,90,2,TCS
+Technical,Which git command creates a new branch and switches to it?,git branch -d,git checkout -b,git merge,git reset,B,medium,Git,90,2,Wipro
+Technical,Which is NOT a NoSQL database?,MongoDB,Cassandra,Redis,MySQL,D,medium,Databases,90,2,Infosys
+Technical,Which algorithm finds shortest path with non-negative edge weights?,BFS,DFS,Dijkstra,Kruskal,C,hard,Algorithms,120,3,TCS
+Technical,In Java which collection does not allow duplicates?,List,Set,Map,ArrayList,B,medium,Java,90,2,Wipro
+Technical,Which memory is volatile?,ROM,SSD,RAM,HDD,C,medium,Computer Basics,90,2,Infosys
+Technical,Which index type is commonly used for primary keys?,Hash index,B-tree index,Bitmap index,Full text index,B,hard,SQL Indexing,120,3,TCS
+Technical,What is the purpose of a mutex?,Interprocess communication,Mutual exclusion,Memory allocation,Deadlock prevention,B,medium,Operating Systems,90,2,Wipro
+Technical,Which sorting algorithm is stable by default?,Quick sort,Heap sort,Merge sort,Selection sort,C,hard,Sorting,120,3,Infosys
+Technical,Which REST method is typically idempotent for updating a resource?,POST,PUT,PATCH,CONNECT,B,medium,APIs,90,2,TCS
+Technical,What is the default port for HTTPS?,80,21,443,25,C,medium,Networking,90,2,Wipro
+Technical,Which data structure is used by the recursion call stack?,Queue,Stack,Heap,Graph,B,medium,Data Structures,90,2,Infosys
+Technical,A key benefit of dependency injection is?,Slower execution,Harder mocking,Easier unit testing,More global state,C,medium,Software Design,90,2,TCS
+Technical,In C a segmentation fault usually indicates?,Syntax error,Invalid memory access,Disk full,Network timeout,B,medium,C Programming,90,2,Wipro
+Technical,Kubernetes is best described as?,Version control,Container orchestration,Relational database,Web browser,B,medium,Cloud,90,2,Infosys
+Coding,What is the output of Python expression 2 ** 3 ** 2?,64,512,256,128,B,hard,Python Operators,120,3,Infosys
+Coding,Which data structure supports average O(1) key lookup?,Array,Hash table,Binary search tree,Stack,B,medium,Data Structures,90,2,TCS
+Coding,What is time complexity of inserting at start of a Python list of length n?,O(1),O(log n),O(n),O(n log n),C,hard,Complexity,120,3,Wipro
+Coding,In C if x is 5 then what is the value of expression x++?,5,6,4,Error,A,medium,C Operators,90,2,Infosys
+Coding,What is the output of Java integer division 10/3?,3,3.33,4,0,A,medium,Java Basics,90,2,TCS
+Coding,Which keyword is used in Python to handle exceptions?,catch,try,throw,finally,B,medium,Exceptions,90,2,Wipro
+Coding,Which sorting algorithm is in-place and typically not stable with average O(n log n)?,Merge sort,Quick sort,Counting sort,Bubble sort,B,hard,Sorting,120,3,Infosys
+Coding,What is the output of Python string multiplication 'abc' * 2?,abc,abcabc,abccab,error,B,medium,Strings,90,2,TCS
+Coding,Which method removes and returns last element of a Python list?,push,pop,append,extend,B,medium,Python Lists,90,2,Wipro
+Coding,After one pass of bubble sort on 3 1 4 2 what is the array?,1 3 2 4,1 2 3 4,3 1 2 4,1 3 4 2,A,medium,Sorting,90,2,TCS
+Coding,Which technique is used in merge sort?,Greedy,DP,Divide and conquer,Backtracking,C,medium,Algorithms,90,2,Infosys
+Coding,What is the value of the sum of numbers 1 to 4 in Python?,9,10,11,12,B,medium,Python Builtins,90,2,Wipro
+Coding,In Java which keyword prevents method overriding?,static,final,private,abstract,B,medium,OOP,90,2,TCS
+Coding,Which data structure is used for BFS traversal?,Stack,Queue,Set,Map,B,medium,Graphs,90,2,Infosys
+Coding,What are the values of bool(0) and bool(3) in Python?,False and True,True and False,False and False,True and True,A,medium,Booleans,90,2,Wipro
+Coding,What is bitwise AND of 12 and 10?,6,8,10,12,B,hard,Bit Manipulation,120,3,TCS
+Coding,If f(1)=1 and f(n)=f(n-1)+2 then what is f(5)?,7,9,11,13,B,medium,Recursion,90,2,Infosys
+Coding,What is space complexity of iterative Fibonacci using two variables?,O(1),O(n),O(log n),O(n^2),A,medium,Dynamic Programming,90,2,Wipro
+Coding,Which Python type is immutable?,list,dict,set,tuple,D,medium,Python Types,90,2,TCS
+Coding,What is output of 5%2 in C++?,0,1,2,3,B,medium,Operators,90,2,Infosys
+Coding,What is worst-case time complexity of quicksort?,O(n log n),O(n^2),O(log n),O(n),B,hard,Sorting,120,3,Wipro
+Coding,Which mechanism ensures mutual exclusion in multithreading?,Garbage collection,Lock,Recursion,Serialization,B,medium,Concurrency,90,2,TCS
+Coding,What does Python list comprehension x*x for x in range(3) produce?,0 1 4,0 1 9,1 4 9,0 2 4,A,medium,Python Comprehension,90,2,Infosys
+Coding,Which file mode opens a file for writing and truncates existing content in Python?,r,w,a,rb,B,medium,Files,90,2,TCS
+Coding,Stack operations push 1 push 2 pop push 3 pop. What values are popped?,2 then 3,1 then 3,2 then 1,3 then 2,A,medium,Stacks,90,2,Wipro

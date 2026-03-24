@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Create Mock Test - CEC{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="header-section" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+        <div style="text-align:left;">
+            <h2>Create Mock Test</h2>
+            <p class="tagline">Create tests and then add questions.</p>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+            <form method="POST" action="{{ url_for('reset_mock_tests') }}" style="margin:0;" onsubmit="return confirm('Reset all mock tests, questions, and submissions? This cannot be undone.');">
+                <button type="submit" class="dash-btn" style="border:none; background:#9f1239;">Reset Mock Tests</button>
+            </form>
+            <a href="{{ url_for('upload_question_bank') }}" class="dash-btn">Upload Question Bank</a>
+            <a href="{{ url_for('admin_dashboard') }}" class="dash-btn">&larr; Back to Dashboard</a>
+        </div>
+    </div>
+
+    <div class="chart-container" style="height:auto; margin-bottom: 24px;">
+        <h3 style="margin-bottom:16px;">New Test</h3>
+        <form method="POST" style="display:grid; gap:14px;">
+            <div class="input-group">
+                <input type="text" name="title" required placeholder=" ">
+                <label>Test Title</label>
+            </div>
+            <div class="input-group">
+                <textarea name="description" placeholder=" " style="min-height: 90px;"></textarea>
+                <label>Description</label>
+            </div>
+            <div class="input-group">
+                <input type="number" name="duration" min="1" required placeholder=" ">
+                <label>Duration (minutes)</label>
+            </div>
+            <div class="input-group">
+                <select name="question_count" required style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white;">
+                    <option value="10">10 Questions</option>
+                    <option value="30">30 Questions</option>
+                </select>
+            </div>
+            <button type="submit" class="submit-btn">Create Test</button>
+        </form>
+    </div>
+
+    <div class="feature-card" style="text-align:left;">
+        <h4 style="margin-bottom:12px;">Existing Tests</h4>
+        {% if tests %}
+            <table style="width:100%; border-collapse: collapse; color:white; font-size:0.9rem;">
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                    <th style="padding:10px 6px; text-align:left;">Title</th>
+                    <th style="padding:10px 6px; text-align:left;">Duration</th>
+                    <th style="padding:10px 6px; text-align:left;">Questions</th>
+                    <th style="padding:10px 6px; text-align:left;">Status</th>
+                    <th style="padding:10px 6px; text-align:left;">Action</th>
+                </tr>
+                {% for t in tests %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+                    <td style="padding:10px 6px;">{{ t.title }}</td>
+                    <td style="padding:10px 6px;">{{ t.duration }} min</td>
+                    <td style="padding:10px 6px;">{{ t.question_count or 10 }}</td>
+                    <td style="padding:10px 6px;">
+                        {% if t.is_published %}
+                            <span class="badge bg-success">Published</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Draft</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding:10px 6px;">
+                        <a href="{{ url_for('add_question', test_id=t.id) }}" class="dash-btn" style="padding:6px 12px;">Add Questions</a>
+                        {% if not t.is_published %}
+                        <form method="POST" action="{{ url_for('publish_test', test_id=t.id) }}" style="display:inline;">
+                            <button type="submit" class="dash-btn" style="padding:6px 12px; border:none; margin-left:8px;">Publish</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p style="opacity: 0.85;">No mock tests created yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

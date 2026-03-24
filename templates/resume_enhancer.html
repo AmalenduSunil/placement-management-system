@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block title %}Resume Enhancer - CEC{% endblock %}
+{% block body_class %}dashboard-page resume-enhancer-page{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/resume_enhancer.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+  <div class="header-section" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+    <div style="text-align:left;">
+      <div class="logo-circle" style="margin: 0;">CEC</div>
+      <h2 style="margin-top: 10px;">Resume Enhancer AI</h2>
+      <p class="tagline" style="margin-bottom: 0;">Upload your resume and get an ATS-friendly rewrite with keyword analysis.</p>
+    </div>
+    <a href="{{ url_for('student_dashboard') }}" class="dash-btn"
+      style="background: rgba(255,255,255,0.1); color: white; border: 1px solid white;">
+      &larr; Back to Dashboard
+    </a>
+  </div>
+
+  {% if not pdf_enabled or not docx_enabled %}
+  <div class="feature-card resume-warning" style="text-align:left; margin-bottom: 20px;">
+    <div style="display:flex;align-items:flex-start;gap:10px;">
+      <i class="bi bi-exclamation-triangle-fill" style="font-size:1.4rem;margin:0;color:#ffd166;"></i>
+      <div>
+        <div style="font-weight:700; margin-bottom:6px;">Optional file support</div>
+        <div style="opacity:0.9; font-size:0.9rem;">
+          {% if not pdf_enabled %}<span class="pill pill-warn">PDF disabled</span>{% endif %}
+          {% if not docx_enabled %}<span class="pill pill-warn">DOCX disabled</span>{% endif %}
+          <div style="margin-top:8px; opacity:0.85;">
+            Install `PyPDF2` and `python-docx` on the server to enable them.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="feature-card" style="text-align:left;">
+    <h4 style="margin-bottom: 12px;"><i class="bi bi-upload" style="display:inline;font-size:1.2rem;"></i> Upload &amp; Configure</h4>
+
+    <form method="POST" enctype="multipart/form-data" id="enhanceForm" style="display:grid; gap:14px;">
+      <div class="input-group" style="margin-bottom: 0;">
+        <input type="text" id="target_role" name="target_role" value="{{ target_role or '' }}" placeholder=" " />
+        <label>Target Role (optional)</label>
+      </div>
+
+      <div class="role-chips">
+        {% for role in ["Python Developer","Data Analyst","Web Developer","ML Engineer","AI Engineer","Java Developer","Full Stack Developer","Cloud Engineer","Backend Developer"] %}
+        <div class="role-chip" data-role="{{ role }}">{{ role }}</div>
+        {% endfor %}
+      </div>
+
+      <div>
+        <label style="display:block; margin-bottom: 8px; color: #fff;">Resume File</label>
+        <div class="drop-zone" id="dropZone">
+          <input type="file" name="resume_file" id="resumeFile"
+            accept=".txt,.md{% if pdf_enabled %},.pdf{% endif %}{% if docx_enabled %},.docx{% endif %}" required />
+          <div class="drop-inner">
+            <i class="bi bi-cloud-arrow-up drop-icon"></i>
+            <div style="font-weight:700;">Drag &amp; drop your resume here</div>
+            <div style="opacity:0.85;font-size:0.9rem;">or click to browse</div>
+            <div class="file-types">
+              <span class="file-badge {% if not pdf_enabled %}file-badge-disabled{% endif %}">PDF</span>
+              <span class="file-badge {% if not docx_enabled %}file-badge-disabled{% endif %}">DOCX</span>
+              <span class="file-badge">TXT</span>
+              <span class="file-badge">MD</span>
+            </div>
+            <div class="selected-file" id="selectedFile">
+              <i class="bi bi-file-earmark-check-fill"></i>
+              <span id="selectedFileName"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn resume-enhance-btn" id="submitBtn">
+        <span class="spinner" id="loadingSpinner"></span>
+        <i class="bi bi-stars" id="submitIcon"></i>
+        <span id="submitText">Enhance My Resume</span>
+      </button>
+    </form>
+  </div>
+
+  {% if result %}
+  <div class="feature-grid" style="margin-top: 20px;">
+    <div class="feature-card" style="text-align:left;">
+      <h4 style="margin-bottom: 10px;"><i class="bi bi-shield-check" style="display:inline;font-size:1.1rem;"></i> ATS Score</h4>
+      {% if result.ats_score >= 70 %}
+      {% set score_color = "#22c55e" %}
+      {% elif result.ats_score >= 45 %}
+      {% set score_color = "#f59e0b" %}
+      {% else %}
+      {% set score_color = "#ef4444" %}
+      {% endif %}
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+        <div style="font-size:2.3rem;font-weight:800;color:{{ score_color }};">{{ result.ats_score }}/100</div>
+        <div style="flex:1;min-width:160px;">
+          <div class="score-bar">
+            <div class="score-bar-fill" style="width: {{ result.ats_score }}%; background: {{ score_color }};"></div>
+          </div>
+          <div style="margin-top: 8px; font-size:0.85rem; opacity:0.85;">
+            {% for label, item in result.score_breakdown.items() %}
+            <div style="display:flex;justify-content:space-between;gap:10px;">
+              <span>{{ label }}</span><span style="font-weight:700;">{{ item.score }}/{{ item.max }}</span>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-card" style="text-align:left;">
+      <h4 style="margin-bottom: 10px;"><i class="bi bi-tags" style="display:inline;font-size:1.1rem;"></i> Keyword Analysis</h4>
+      <div style="opacity:0.9; font-size:0.9rem; margin-bottom:10px;">
+        Target: <strong>{{ result.role_display }}</strong>
+      </div>
+      {% if result.present_keywords %}
+      <div style="font-weight:700; margin-bottom:6px;">Already present</div>
+      <div class="kw-grid" style="margin-bottom: 12px;">
+        {% for kw in result.present_keywords %}
+        <span class="pill pill-ok">{{ kw }}</span>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% if result.missing_keywords %}
+      <div style="font-weight:700; margin-bottom:6px;">Add these</div>
+      <div class="kw-grid">
+        {% for kw in result.missing_keywords %}
+        <span class="pill pill-bad">{{ kw }}</span>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="pill pill-ok">Great! Most target keywords are already present.</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="feature-grid" style="margin-top: 20px;">
+    <div class="feature-card" style="text-align:left;">
+      <h4 style="margin-bottom: 10px;"><i class="bi bi-file-text" style="display:inline;font-size:1.1rem;"></i> Original Resume</h4>
+      <div class="input-group" style="margin-bottom:0;">
+        <textarea readonly style="min-height: 360px;">{{ original_resume }}</textarea>
+      </div>
+    </div>
+    <div class="feature-card" style="text-align:left;">
+      <h4 style="margin-bottom: 10px;"><i class="bi bi-file-earmark-person" style="display:inline;font-size:1.1rem;"></i> Enhanced Resume</h4>
+      <div class="input-group" style="margin-bottom:0;">
+        <textarea readonly style="min-height: 360px;">{{ result.plain_text }}</textarea>
+      </div>
+      <div class="actions-row">
+        <form method="POST" action="{{ url_for('resume_download') }}" style="display:inline;">
+          <input type="hidden" name="content" value="{{ result.plain_text }}">
+          <input type="hidden" name="filename"
+            value="enhanced_resume_{{ result.role_display | replace(' ', '_') | lower }}.txt">
+          <button type="submit" class="dash-btn" style="border:none; cursor:pointer;">
+            <i class="bi bi-download"></i> Download
+          </button>
+        </form>
+        <button class="dash-btn" type="button" id="copyBtn"
+          style="border:none; cursor:pointer; background: rgba(255,255,255,0.1); color: white; border: 1px solid white;">
+          <i class="bi bi-clipboard"></i> Copy
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="feature-card" style="text-align:left; margin-top: 20px;">
+    <h4 style="margin-bottom: 10px;"><i class="bi bi-lightning-fill" style="display:inline;font-size:1.1rem;"></i> High-Impact Fixes</h4>
+    <ul class="fixes-list">
+      {% for fix in result.fixes %}
+      <li><span class="fix-check"><i class="bi bi-check2"></i></span> {{ fix }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <script>
+    window.RESUME_PLAIN_TEXT = {{ result.plain_text | tojson }};
+  </script>
+  {% endif %}
+</div>
+
+<div class="toast" id="toast"><i class="bi bi-clipboard-check-fill"></i> Copied to clipboard!</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/resume_enhancer.js') }}"></script>
+{% endblock %}
+

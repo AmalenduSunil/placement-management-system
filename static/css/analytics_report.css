@@ -1,0 +1,57 @@
+.analytics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  text-align: left;
+}
+
+.analytics-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.analytics-header .logo-circle {
+  margin: 0;
+}
+
+.analytics-header .tagline {
+  margin: 0;
+}
+
+.analytics-kpis {
+  margin-bottom: 20px;
+}
+
+.analytics-kpi {
+  color: #ff69b4;
+}
+
+.analytics-chart {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.analytics-chart canvas {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.analytics-muted {
+  opacity: 0.85;
+  font-size: 0.95rem;
+  margin-top: 12px;
+}
+
+@media (max-width: 520px) {
+  .analytics-header-left {
+    width: 100%;
+  }
+  .analytics-header .dash-btn {
+    width: 100%;
+    text-align: center;
+  }
+}

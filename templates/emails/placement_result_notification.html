@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placement Result: {{ placement.cmpname }}</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e1e8ed;
+        }
+        .header {
+            background-color: #1e3a8a;
+            padding: 28px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            color: #ffffff;
+            margin: 0;
+            font-size: 22px;
+            letter-spacing: 0.4px;
+        }
+        .content {
+            padding: 28px;
+        }
+        .result-badge {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: #e0f2fe;
+            color: #075985;
+            font-weight: bold;
+            margin: 12px 0 20px;
+        }
+        .details-card {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 16px;
+            border-radius: 4px;
+            margin-bottom: 24px;
+        }
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .details-table td {
+            padding: 8px 0;
+            vertical-align: top;
+        }
+        .details-label {
+            font-weight: bold;
+            color: #4b5563;
+            width: 40%;
+        }
+        .details-value {
+            color: #111827;
+            font-weight: 500;
+        }
+        .cta {
+            text-align: center;
+            margin-top: 24px;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #2563eb;
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        .footer {
+            background-color: #f9fafb;
+            padding: 18px;
+            text-align: center;
+            font-size: 13px;
+            color: #6b7280;
+            border-top: 1px solid #e5e7eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Placement Application Update</h1>
+        </div>
+        <div class="content">
+            <p>Dear {{ student.name }},</p>
+            <p>Your placement application result has been updated.</p>
+
+            <div class="result-badge">Status: {{ status_label }}</div>
+
+            <div class="details-card">
+                <table class="details-table">
+                    <tr>
+                        <td class="details-label">Company</td>
+                        <td class="details-value">{{ placement.cmpname }}</td>
+                    </tr>
+                    {% if placement.jobreq %}
+                    <tr>
+                        <td class="details-label">Job Role</td>
+                        <td class="details-value">{{ placement.jobreq }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if placement.package %}
+                    <tr>
+                        <td class="details-label">Package</td>
+                        <td class="details-value">{{ placement.package }} LPA</td>
+                    </tr>
+                    {% endif %}
+                    {% if placement.venue %}
+                    <tr>
+                        <td class="details-label">Venue</td>
+                        <td class="details-value">{{ placement.venue }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if placement.date %}
+                    <tr>
+                        <td class="details-label">Drive Date</td>
+                        <td class="details-value">{{ placement.date.strftime('%B %d, %Y') }}</td>
+                    </tr>
+                    {% endif %}
+                </table>
+            </div>
+
+            {% if custom_message %}
+            <p><strong>Message from Admin:</strong> {{ custom_message }}</p>
+            {% endif %}
+
+            <div class="cta">
+                <a href="{{ url_for('login_page', _external=True) }}" class="btn">Open Student Portal</a>
+            </div>
+        </div>
+        <div class="footer">
+            <p>This is an automated message from the Training & Placement Cell.</p>
+            <p>{{ config.get('COLLEGE_NAME', 'CEC Placement Administration') }}</p>
+        </div>
+    </div>
+</body>
+</html>

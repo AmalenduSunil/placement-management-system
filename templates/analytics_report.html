@@ -2,160 +2,92 @@
 {% block title %}Analytics Report - CEC{% endblock %}
 {% block body_class %}dashboard-page{% endblock %}
 
+{% block extra_head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/analytics_report.css') }}">
+{% endblock %}
+
 {% block content %}
 <div class="dashboard-container">
-    <div class="header-section" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
-        <div style="text-align:left;">
-            <div class="logo-circle" style="margin: 0;">CEC</div>
-            <h2 style="margin-top:10px;">Analytics Report</h2>
-            <p class="tagline" style="margin-bottom:0;">{{ student.name }} ({{ student.register_number }})</p>
+    <div class="header-section analytics-header">
+        <div class="analytics-header-left">
+            <div class="logo-circle">CEC</div>
+            <div>
+                <h2>Analytics Report</h2>
+                <p class="tagline">{{ student.name }} ({{ student.register_number }})</p>
+            </div>
         </div>
         <a href="{{ url_for('student_dashboard') }}" class="dash-btn">&larr; Back to Dashboard</a>
     </div>
 
-    <div class="feature-grid" style="margin-bottom:20px;">
+    <div class="feature-grid analytics-kpis" data-student-id="{{ student.st_id }}">
         <div class="feature-card">
-            <h5>Overall Accuracy</h5>
-            <h2 style="color:#ff69b4;">{{ analytics.overall_accuracy }}%</h2>
+            <h5>Latest Score</h5>
+            <h2 class="analytics-kpi" id="kpiLatest">&mdash;</h2>
         </div>
         <div class="feature-card">
             <h5>Tests Attempted</h5>
-            <h2 style="color:#ff69b4;">{{ analytics.attempts_count }}</h2>
+            <h2 class="analytics-kpi" id="kpiAttempts">&mdash;</h2>
         </div>
         <div class="feature-card">
-            <h5>MCQ Correct</h5>
-            <h2 style="color:#ff69b4;">{{ analytics.overall_correct }}/{{ analytics.overall_total }}</h2>
+            <h5>Average Score</h5>
+            <h2 class="analytics-kpi" id="kpiAverage">&mdash;</h2>
         </div>
         <div class="feature-card">
-            <h5>Coding Completion</h5>
-            <h2 style="color:#ff69b4;">{{ analytics.coding_completion }}%</h2>
-        </div>
-        <div class="feature-card">
-            <h5>Avg Pace</h5>
-            <h2 style="color:#ff69b4;">{{ analytics.avg_questions_per_minute }} Q/min</h2>
-        </div>
-        <div class="feature-card">
-            <h5>Trend</h5>
-            <h2 style="color:#ff69b4;">
-                {% if analytics.trend_delta > 0 %}+{% endif %}{{ analytics.trend_delta }}%
-            </h2>
+            <h5>Best Score</h5>
+            <h2 class="analytics-kpi" id="kpiBest">&mdash;</h2>
         </div>
     </div>
 
-    <div class="chart-container" style="height:320px;">
+    <div class="chart-container analytics-chart" style="height:320px;">
         <h3>Performance Trend</h3>
         <canvas id="trendChart"></canvas>
+        <p class="analytics-muted" id="trendEmpty" style="display:none;">No attempts yet. Take a mock test to see your performance here.</p>
     </div>
 
-    <div class="chart-container" style="height:320px;">
-        <h3>Topic-wise Accuracy</h3>
-        <canvas id="topicChart"></canvas>
+    <div class="chart-container analytics-chart" style="height:320px;">
+        <h3>Section Accuracy (Average)</h3>
+        <canvas id="sectionChart"></canvas>
     </div>
 
-    <div class="feature-grid" style="margin-bottom:20px;">
-        <div class="feature-card" style="text-align:left;">
-            <h5 style="margin-bottom:10px;">Strong Areas</h5>
-            {% if analytics.strong_topics %}
-                {% for topic in analytics.strong_topics %}
-                    <p style="margin:6px 0;">- {{ topic }}</p>
-                {% endfor %}
-            {% else %}
-                <p>No topic data yet.</p>
-            {% endif %}
+    <div class="feature-grid analytics-kpis" style="margin-top: 24px;">
+        <div class="feature-card">
+            <h5>Applications</h5>
+            <h2 class="analytics-kpi" id="kpiApplications">&mdash;</h2>
         </div>
-        <div class="feature-card" style="text-align:left;">
-            <h5 style="margin-bottom:10px;">Weak Areas</h5>
-            {% if analytics.weak_topics %}
-                {% for topic in analytics.weak_topics %}
-                    <p style="margin:6px 0;">- {{ topic }}</p>
-                {% endfor %}
-            {% else %}
-                <p>No weak areas identified yet.</p>
-            {% endif %}
+        <div class="feature-card">
+            <h5>Selected</h5>
+            <h2 class="analytics-kpi" id="kpiSelected">&mdash;</h2>
+        </div>
+        <div class="feature-card">
+            <h5>Success Rate</h5>
+            <h2 class="analytics-kpi" id="kpiSuccessRate">&mdash;</h2>
+        </div>
+        <div class="feature-card">
+            <h5>Average Salary (LPA)</h5>
+            <h2 class="analytics-kpi" id="kpiAvgSalary">&mdash;</h2>
         </div>
     </div>
 
-    <div class="feature-card" style="text-align:left;">
-        <h5 style="margin-bottom:10px;">What To Improve Next</h5>
-        {% for item in analytics.suggestions %}
-            <p style="margin:8px 0;">- {{ item }}</p>
-        {% endfor %}
+    <div class="chart-container analytics-chart" style="height:320px;">
+        <h3>Placement Success Rate</h3>
+        <canvas id="placementChart"></canvas>
+        <p class="analytics-muted" id="placementEmpty" style="display:none;">No placement applications yet.</p>
+    </div>
+
+    <div class="chart-container analytics-chart" style="height:320px;">
+        <h3>Industry Salary Trends</h3>
+        <canvas id="salaryTrendChart"></canvas>
+        <p class="analytics-muted" id="salaryTrendEmpty" style="display:none;">No salary data available yet.</p>
+    </div>
+
+    <div class="feature-card" style="text-align:left; margin-top: 24px;">
+        <h4>Top Recruiters by Package</h4>
+        <div id="companyStatsContainer" style="max-height: 300px; overflow-y: auto;"></div>
+        <p class="analytics-muted" id="companyStatsEmpty" style="display:none;">No placement data available.</p>
     </div>
 </div>
+{% endblock %}
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-const trendLabels = {{ analytics.labels | tojson }};
-const trendScores = {{ analytics.scores | tojson }};
-const topicLabels = {{ analytics.topic_labels | tojson }};
-const topicScores = {{ analytics.topic_accuracy | tojson }};
-
-if (window.Chart) {
-const trendCtx = document.getElementById('trendChart').getContext('2d');
-new Chart(trendCtx, {
-    type: 'line',
-    data: {
-        labels: trendLabels,
-        datasets: [{
-            label: 'Score %',
-            data: trendScores,
-            borderColor: '#ff69b4',
-            backgroundColor: 'rgba(255, 105, 180, 0.2)',
-            borderWidth: 3,
-            tension: 0.35,
-            fill: true,
-            pointBackgroundColor: '#fff'
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-            y: {
-                beginAtZero: true,
-                max: 100,
-                ticks: { color: '#ffffff' },
-                grid: { color: 'rgba(255,255,255,0.1)' }
-            },
-            x: {
-                ticks: { color: '#ffffff' },
-                grid: { display: false }
-            }
-        },
-        plugins: { legend: { display: false } }
-    }
-});
-
-const topicCtx = document.getElementById('topicChart').getContext('2d');
-new Chart(topicCtx, {
-    type: 'bar',
-    data: {
-        labels: topicLabels.length ? topicLabels : ['No Data'],
-        datasets: [{
-            label: 'Topic Accuracy %',
-            data: topicScores.length ? topicScores : [0],
-            backgroundColor: ['#ff69b4', '#ff87c2', '#a91079', '#f6b5d2', '#570a57'],
-            borderRadius: 8
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-            y: {
-                beginAtZero: true,
-                max: 100,
-                ticks: { color: '#ffffff' },
-                grid: { color: 'rgba(255,255,255,0.1)' }
-            },
-            x: {
-                ticks: { color: '#ffffff' },
-                grid: { display: false }
-            }
-        },
-        plugins: { legend: { display: false } }
-    }
-});
-}
-</script>
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/analytics_report.js') }}"></script>
 {% endblock %}

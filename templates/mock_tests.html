@@ -6,23 +6,38 @@
 {% block content %}
 <div class="dashboard-container">
     <div class="header-section">
-        <h1>Available Mock Tests</h1>
-        <p class="tagline">Choose a test and start practicing.</p>
+        <h1>Placement Mock Tests</h1>
+        <p class="tagline">Practice with placement-style questions and track your score.</p>
     </div>
 
     <div class="feature-grid">
-        {% for test in tests %}
         <div class="feature-card">
-            <h5>{{ test.title }}</h5>
-            <p><strong>Topic:</strong> {{ test.topic or "General" }}</p>
-            <p>{{ test.description or "No description provided." }}</p>
-            <p><strong>Duration:</strong> {{ test.duration }} minutes</p>
-            <a href="{{ url_for('attend_test', test_id=test.test_id) }}" class="dash-btn">Attend Test</a>
+            <h5>Full Placement Mock Test</h5>
+            <p style="margin: 6px 0 8px 0; opacity: 0.9;">Adaptive difficulty</p>
+            <p style="margin: 0 0 6px 0;"><strong>30 questions</strong></p>
+            <p style="margin: 0 0 14px 0; opacity: 0.9;">All sections</p>
+            <a href="{{ url_for('csv_mock_test_page') }}" class="dash-btn">Start Test</a>
         </div>
+
+        <div class="feature-card">
+            <h5>Practice Mode</h5>
+            <p style="margin: 6px 0 14px 0; opacity: 0.9;">Easy questions</p>
+            <a href="{{ url_for('csv_mock_test_page', mode='practice') }}" class="dash-btn">Start Practice</a>
+        </div>
+
+        {% for test in tests %}
+        {% set title_lc = (test.title or '')|lower %}
+        {% set desc_lc = (test.description or '')|lower %}
+        {% if title_lc.startswith('aptitude') or 'aptitude mock test' in title_lc or 'basic aptitude' in desc_lc %}
+            {# Hidden: replaced by CSV Mock Test which includes all sections. #}
         {% else %}
         <div class="feature-card">
-            <p>No mock tests available.</p>
+            <h5>{{ test.title }}</h5>
+            <p>{{ test.description or "No description provided." }}</p>
+            <p><strong>Duration:</strong> {{ test.duration }} minutes</p>
+            <a href="{{ url_for('start_test', test_id=test.id) }}" class="dash-btn">Start Test</a>
         </div>
+        {% endif %}
         {% endfor %}
     </div>
 

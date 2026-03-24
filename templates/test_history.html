@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Test History - CEC{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="header-section" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+        <div style="text-align:left;">
+            <h2>Previous Test History</h2>
+            <p class="tagline">Track all submitted tests and performance.</p>
+        </div>
+        <a href="{{ url_for('student_dashboard') }}" class="dash-btn">&larr; Back to Dashboard</a>
+    </div>
+
+    <div class="feature-card" style="text-align:left; overflow-x:auto;">
+        {% if rows %}
+            <table style="width:100%; border-collapse: collapse; color:white; font-size:0.9rem;">
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                    <th style="padding:10px 6px; text-align:left;">Test</th>
+                    <th style="padding:10px 6px; text-align:left;">Score</th>
+                    <th style="padding:10px 6px; text-align:left;">Percentage</th>
+                    <th style="padding:10px 6px; text-align:left;">Submitted At</th>
+                </tr>
+                {% for row in rows %}
+                {% set result = row[0] %}
+                {% set test = row[1] %}
+                {% set pct = ((result.score / result.total_questions) * 100) if result.total_questions else 0 %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+                    <td style="padding:10px 6px;">{{ test.title if test else "-" }}</td>
+                    <td style="padding:10px 6px;">{{ result.score }}/{{ result.total_questions }}</td>
+                    <td style="padding:10px 6px;">{{ '%.2f'|format(pct) }}%</td>
+                    <td style="padding:10px 6px;">{{ result.submitted_at.strftime('%d %b %Y, %I:%M %p') if result.submitted_at else "-" }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p style="opacity: 0.85;">No test attempts yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

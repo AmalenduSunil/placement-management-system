@@ -3,6 +3,52 @@
 {% block title %}Dashboard - CEC{% endblock %}
 {% block body_class %}dashboard-page{% endblock %}
 
+{% block extra_head %}
+<style>
+    .attempt-history {
+        display: grid;
+        gap: 10px;
+        max-height: 320px;
+        overflow: auto;
+        padding-right: 6px;
+    }
+
+    .attempt-item {
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .attempt-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .attempt-title {
+        font-weight: 700;
+        font-size: 0.95rem;
+        line-height: 1.25;
+    }
+
+    .attempt-meta {
+        opacity: 0.85;
+        font-size: 0.82rem;
+        margin-top: 6px;
+        line-height: 1.35;
+    }
+
+    .attempt-score {
+        font-weight: 800;
+        color: #ff69b4;
+        font-size: 0.95rem;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="dashboard-container">
     <div class="header-section" style="display: flex; justify-content: space-between; align-items: center;">
@@ -20,25 +66,48 @@
         <canvas id="progressChart"></canvas>
     </div>
 
+    <div class="feature-grid" style="margin-top:-18px; margin-bottom: 24px;">
+        <div class="feature-card" style="text-align:left;">
+            <h5>Average Score</h5>
+            <h2 style="color:#ff69b4;"><span id="avgScore">--</span>%</h2>
+        </div>
+        <div class="feature-card" style="text-align:left;">
+            <h5>Best Score</h5>
+            <h2 style="color:#ff69b4;"><span id="bestScore">--</span>%</h2>
+        </div>
+        <div class="feature-card" style="text-align:left;">
+            <h5>Total Attempts</h5>
+            <h2 style="color:#ff69b4;"><span id="attemptsCount">--</span></h2>
+        </div>
+    </div>
+
+    <div class="feature-card" style="text-align:left; margin-bottom: 24px;">
+        <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap; margin-bottom: 12px;">
+            <h4 style="margin:0;"><i class="bi bi-clock-history" style="display:inline; font-size: 1.2rem;"></i> Previous Attempts</h4>
+            <a href="{{ url_for('test_history') }}" class="dash-btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid white;">View All</a>
+        </div>
+        <div id="attemptHistory" class="attempt-history"></div>
+    </div>
+
     <div class="feature-grid">
         <div class="feature-card">
             <i class="bi bi-journal-check"></i>
             <h5>Mock Tests</h5>
-            <p>View tests, answer questions, and track score.</p>
+            <p>Practice placement-style mock tests and track your performance over time.</p>
             <a href="{{ url_for('mock_tests') }}" class="dash-btn">View Tests</a>
         </div>
 
         <div class="feature-card">
             <i class="bi bi-robot"></i>
             <h5>Resume AI</h5>
-            <p>Enhance your resume with AI suggestions.</p>
+            <p>Enhance your resume for ATS readiness with role-based keywords and formatting.</p>
             <a href="{{ url_for('resume_enhancer') }}" class="dash-btn">Enhance</a>
         </div>
 
         <div class="feature-card">
             <i class="bi bi-bar-chart-line"></i>
             <h5>Analytics</h5>
-            <p>View your performance reports.</p>
+            <p>View section-wise insights and monitor your placement preparation progress.</p>
             <a href="{{ url_for('analytics_report') }}" class="dash-btn">View</a>
         </div>
 
@@ -128,40 +197,222 @@
     if (!window.Chart) {
         console.error("Chart.js failed to load");
     }
-    const ctx = document.getElementById('progressChart').getContext('2d');
+    const canvas = document.getElementById('progressChart');
+    const ctx = canvas ? canvas.getContext('2d') : null;
+    let chart = null;
 
-    if (window.Chart) new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: {{ labels | tojson }},
-            datasets: [{
-                label: 'Score',
-                data: {{ scores | tojson }},
-                borderColor: '#ff69b4',
-                backgroundColor: 'rgba(255, 105, 180, 0.2)',
-                borderWidth: 3,
-                tension: 0.4,
-                fill: true,
-                pointBackgroundColor: '#ffffff',
-            }]
-        },
-        options: {
+    function _baseOptions(showLegend) {
+        return {
             responsive: true,
             maintainAspectRatio: false,
             scales: {
                 y: {
+                    min: 0,
+                    max: 100,
                     ticks: { color: '#ffffff' },
                     grid: { color: 'rgba(255,255,255,0.1)' }
                 },
                 x: {
-                    ticks: { color: '#ffffff' },
+                    ticks: { color: '#ffffff', maxRotation: 0, autoSkip: true },
                     grid: { display: false }
                 }
             },
             plugins: {
-                legend: { display: false }
+                legend: { display: !!showLegend, labels: { color: "#ffffff" } },
+                tooltip: {
+                    callbacks: {
+                        label: function (ctx2) {
+                            const label = ctx2.dataset && ctx2.dataset.label ? `${ctx2.dataset.label}: ` : "";
+                            const v = (ctx2.parsed && typeof ctx2.parsed.y === "number") ? ctx2.parsed.y : ctx2.raw;
+                            return `${label}${v}%`;
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    function _formatLabel(raw) {
+        const text = String(raw || "").trim();
+        const ms = Date.parse(text);
+        if (!Number.isNaN(ms)) {
+            try {
+                return new Date(ms).toLocaleString(undefined, { day: "2-digit", month: "short" });
+            } catch (e) {
+                return text.replace("T", " ").replace("Z", "");
             }
         }
+        return text || "Attempt";
+    }
+
+    function _normalizeDatasets(datasets, kind) {
+        const arr = Array.isArray(datasets) ? datasets : [];
+        if (!arr.length) {
+            return [{
+                label: "Overall Score (%)",
+                data: [],
+                borderColor: "#ff69b4",
+                backgroundColor: "rgba(255, 105, 180, 0.2)",
+                borderWidth: 3,
+                tension: 0.35,
+                fill: true,
+                pointRadius: 4,
+                pointHoverRadius: 6,
+                pointBackgroundColor: "#ffffff",
+                pointBorderColor: "#ff69b4",
+            }];
+        }
+
+        if (kind === "bar") {
+            const first = { ...(arr[0] || {}) };
+            first.backgroundColor = first.backgroundColor || "rgba(255, 105, 180, 0.35)";
+            first.borderColor = first.borderColor || "#ff69b4";
+            first.borderWidth = 1;
+            first.borderRadius = 10;
+            return [first];
+        }
+
+        return arr.map((ds) => ({
+            ...ds,
+            tension: (typeof ds.tension === "number") ? ds.tension : 0.35,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            pointBackgroundColor: "#ffffff",
+            pointBorderColor: (ds.borderColor || "#ff69b4"),
+        }));
+    }
+
+    function _ensureChart(kind, showLegend) {
+        if (!window.Chart || !ctx) return null;
+        if (chart && chart.config && chart.config.type === kind) return chart;
+        if (chart) {
+            try { chart.destroy(); } catch (e) { /* ignore */ }
+            chart = null;
+        }
+
+        chart = new Chart(ctx, {
+            type: kind,
+            data: { labels: [], datasets: [] },
+            options: _baseOptions(showLegend),
+        });
+        return chart;
+    }
+
+    // REQUIRED: load analytics dynamically from backend API (no static arrays).
+    const analyticsUrl = {{ url_for('api_student_analytics', student_id=student.st_id) | tojson }};
+    function loadAnalytics() {
+        return fetch(analyticsUrl, { credentials: 'same-origin' })
+            .then(res => res.json())
+            .then(data => {
+                const rawLabels = Array.isArray(data.labels) ? data.labels : [];
+                const labels = rawLabels.map(_formatLabel);
+                const hasTrend = labels.length >= 2;
+                const kind = hasTrend ? "line" : "bar";
+                const showLegend = hasTrend; // only show legend when there is a trend (multiple points)
+                const currentChart = _ensureChart(kind, showLegend);
+                if (!currentChart) return;
+
+                currentChart.data.labels = labels;
+                const ds = (Array.isArray(data.datasets) && data.datasets.length) ? data.datasets : null;
+                const fallback = data.data ? [{ label: "Overall Score (%)", data: data.data }] : [];
+                currentChart.data.datasets = _normalizeDatasets(ds || fallback, kind);
+                currentChart.update();
+
+                // Summary cards
+                const meta = data.meta || {};
+                const avgEl = document.getElementById("avgScore");
+                const bestEl = document.getElementById("bestScore");
+                const attemptsEl = document.getElementById("attemptsCount");
+                if (avgEl) avgEl.textContent = (meta.average_score_pct ?? "--");
+                if (bestEl) bestEl.textContent = (meta.best_score_pct ?? "--");
+                if (attemptsEl) attemptsEl.textContent = (meta.attempts ?? "--");
+
+                // Attempts history (latest first)
+                const listEl = document.getElementById("attemptHistory");
+                if (listEl) {
+                    const items = Array.isArray(data.history) ? data.history.slice().reverse().slice(0, 6) : [];
+                    if (!items.length) {
+                        listEl.innerHTML = '<p style="opacity:0.85;margin:0;">No attempts yet.</p>';
+                    } else {
+                        const sourceLabel = (src) => {
+                            const key = String(src || '').toLowerCase();
+                            if (key === 'csv_full') return 'Full Placement';
+                            if (key === 'csv_practice') return 'Practice';
+                            if (key === 'csv_adaptive') return 'Adaptive';
+                            if (key === 'db_test') return 'Mock Test';
+                            return src || '';
+                        };
+                        const formatWhen = (raw) => {
+                            const text = String(raw || '').trim();
+                            const ms = Date.parse(text);
+                            if (!Number.isNaN(ms)) {
+                                try {
+                                    return new Date(ms).toLocaleString(undefined, {
+                                        day: '2-digit',
+                                        month: 'short',
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                    });
+                                } catch (e) {
+                                    return text.replace('T', ' ').replace('Z', '');
+                                }
+                            }
+                            return text || 'Attempt';
+                        };
+                        const hasSectionPct = (it) => {
+                            return ['aptitude_pct', 'logical_pct', 'technical_pct', 'coding_pct'].some(k => Object.prototype.hasOwnProperty.call(it, k));
+                        };
+
+                        listEl.innerHTML = items.map(it => {
+                            const ts = formatWhen(it.timestamp || it.label);
+                            const src = sourceLabel(it.source);
+                            const srcText = src ? ` • ${src}` : '';
+                            const showBreakdown = hasSectionPct(it);
+                            return `
+                              <div class="attempt-item">
+                                <div class="attempt-top">
+                                  <div class="attempt-title">${ts}${srcText}</div>
+                                  <div class="attempt-score">${(it.score_pct ?? 0)}%</div>
+                                </div>
+                                <div class="attempt-meta">
+                                  ${showBreakdown
+                                    ? `Apt ${it.aptitude_pct ?? 0}% • Log ${it.logical_pct ?? 0}% • Tech ${it.technical_pct ?? 0}% • Code ${it.coding_pct ?? 0}%`
+                                    : `Section breakdown will appear for new attempts.`
+                                  }
+                                </div>
+                              </div>
+                            `;
+                        }).join('');
+                    }
+                }
+            })
+            .catch(err => console.error('Analytics fetch failed:', err));
+    }
+    window.loadAnalytics = loadAnalytics;
+
+    // Initial load
+    loadAnalytics();
+
+    // Refresh when a test submission triggers an analytics refresh signal.
+    const ANALYTICS_REFRESH_KEY = "analytics_refresh_ts";
+    window.addEventListener("storage", (event) => {
+        if (event && event.key === ANALYTICS_REFRESH_KEY) {
+            loadAnalytics();
+        }
     });
+
+    // Same-origin cross-tab signaling; also works when multiple pages are open.
+    try {
+        const ch = new BroadcastChannel("analytics_refresh");
+        ch.addEventListener("message", () => loadAnalytics());
+    } catch (e) {
+        // ignore
+    }
+
+    // Refresh when user comes back to the dashboard tab.
+    document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) loadAnalytics();
+    });
+    window.addEventListener("focus", () => loadAnalytics());
 </script>
 {% endblock %}

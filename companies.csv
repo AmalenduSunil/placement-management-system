@@ -1,0 +1,88 @@
+Company,Industry,Status,RegistrationNo,GSTNo
+Reliance Industries Ltd,Energy,Verified,10001,27AAACR5055K1Z8
+Tata Consultancy Services,IT Services,Verified,10002,27AAACT2702F1ZN
+HDFC Bank Ltd,Banking,Pending,10003,27AAACH2702H1Z9
+Infosys Ltd,IT Services,Verified,10004,29AAACI4798L1ZJ
+ICICI Bank Ltd,Banking,Flagged,10005,27AAACI1195H1Z2
+Bharti Airtel Ltd,Telecom,Verified,10006,29AAACB2894G1ZL
+State Bank of India,Banking,Verified,10007,27AAACS8577K1Z9
+Larsen & Toubro Ltd,Engineering,Pending,10008,27AAACL0140P1ZP
+Wipro Ltd,IT Services,Verified,10009,29AAACW5949R1ZJ
+Bajaj Finance Ltd,Finance,Flagged,10010,27AAACB4186M1ZL
+AgroBloom Enterprises,Agriculture,Pending,10011,32XYZE5678K2Z7
+BuildRight Constructions,Real Estate,Flagged,10012,29LMNO3456P3Z9
+AquaNova Systems,Manufacturing,Verified,10013,33PQRS7890Q4Z1
+EduBright Solutions,Education,Pending,10014,27UVWX2345R5Z2
+CloudNova Technologies,IT Services,Verified,10015,27CLDNV1234F1Z8
+GreenWorks Agro,Agriculture,Flagged,10016,32GRNWK5678K2Z7
+Skyline Builders,Real Estate,Verified,10017,29SKYBL3456P3Z9
+MediCare Plus,Healthcare,Pending,10018,27MEDCR7890Q4Z1
+FinTrust Capital,Finance,Verified,10019,27FNTST2345R5Z2
+RetailHub India,Retail,Verified,10020,27RTHUB1234F1Z5
+DataEdge Analytics,IT Services,Flagged,10021,29DTEDG5678K2Z7
+BrightFuture Academy,Education,Pending,10022,27BRFTR3456P3Z9
+AgriCore Farms,Agriculture,Verified,10023,32AGCR7890Q4Z1
+InnoSoft Labs,IT Services,Verified,10024,27INNST2345R5Z2
+UrbanNest Realty,Real Estate,Pending,10025,29URBNN5678K2Z7
+PureWater Systems,Manufacturing,Flagged,10026,33PWTR3456P3Z9
+SmartEdu Pvt Ltd,Education,Verified,10027,27SMEDU7890Q4Z1
+SafeBank Ltd,Finance,Verified,10028,27SFBNK2345R5Z2
+QuickMart Retail,Retail,Pending,10029,27QKMRT1234F1Z5
+NextGen IT Solutions,IT Services,Verified,10030,29NXGIT5678K2Z7
+FarmFresh Organics,Agriculture,Flagged,10031,32FRFRS3456P3Z9
+HealthFirst Clinics,Healthcare,Verified,10032,27HLTFR7890Q4Z1
+SecurePay Fintech,Finance,Pending,10033,27SCRPY2345R5Z2
+EduNova Academy,Education,Verified,10034,27EDNV1234F1Z5
+BuildMax Constructions,Real Estate,Flagged,10035,29BLDMX5678K2Z7
+AeroTech Systems,Manufacturing,Verified,10036,33ARTCH3456P3Z9
+BrightMinds School,Education,Pending,10037,27BRMND7890Q4Z1
+AgriNova Agro,Agriculture,Verified,10038,32AGRNV2345R5Z2
+TechBridge Pvt Ltd,IT Services,Verified,10039,27TCHBR1234F1Z5
+SafeHomes Realty,Real Estate,Pending,10040,29SFHMS5678K2Z7
+MediNova Healthcare,Healthcare,Flagged,10041,27MDNVH3456P3Z9
+FinEdge Capital,Finance,Verified,10042,27FNDGE7890Q4Z1
+RetailNova Stores,Retail,Pending,10043,27RTNV2345R5Z2
+EduCore Solutions,Education,Verified,10044,27EDCR1234F1Z5
+AgroTrust Farms,Agriculture,Flagged,10045,32AGTR5678K2Z7
+CloudEdge IT,IT Services,Verified,10046,29CLDED3456P3Z9
+UrbanEdge Realty,Real Estate,Pending,10047,29URDED7890Q4Z1
+PureHealth Clinics,Healthcare,Verified,10048,27PRHLT2345R5Z2
+SafeFinance Ltd,Finance,Verified,10049,27SFNCE1234F1Z5
+BrightEdu Academy,Education,Pending,10050,27BRTE2345R5Z2
+FarmEdge Organics,Agriculture,Verified,10051,32FRMED5678K2Z7
+TechNova Labs,IT Services,Flagged,10052,27TNOVA3456P3Z9
+BuildEdge Constructions,Real Estate,Verified,10053,29BLDED7890Q4Z1
+AeroWorks Pvt Ltd,Manufacturing,Pending,10054,33ARWKS3456P3Z9
+EduSphere Academy,Education,Verified,10055,27EDSPH7890Q4Z1
+AgriTrust Agro,Agriculture,Flagged,10056,32AGTST2345R5Z2
+CloudWorks IT,IT Services,Verified,10057,29CLWKS5678K2Z7
+UrbanNest Builders,Real Estate,Pending,10058,29URBNB3456P3Z9
+MediTrust Clinics,Healthcare,Verified,10059,27MDTRS7890Q4Z1
+FinNova Capital,Finance,Flagged,10060,27FNOVA2345R5Z2
+RetailSphere Stores,Retail,Verified,10061,27RTSPH1234F1Z5
+EduTrust Academy,Education,Pending,10062,27EDTRS5678K2Z7
+AgroSphere Farms,Agriculture,Verified,10063,32AGSPH3456P3Z9
+TechEdge Labs,IT Services,Verified,10064,27TCHED2345R5Z2
+SafeNest Realty,Real Estate,Pending,10065,29SFNST5678K2Z7
+MediSphere Healthcare,Healthcare,Flagged,10066,27MDSPH3456P3Z9
+FinTrust Bank,Finance,Verified,10067,27FTRST7890Q4Z1
+RetailEdge Pvt Ltd,Retail,Pending,10068,27RTEDG2345R5Z2
+EduMax Academy,Education,Verified,10069,27EDMAX1234F1Z5
+AgriEdge Agro,Agriculture,Flagged,10070,32AGEDG5678K2Z7
+CloudMax IT,IT Services,Verified,10071,29CLMAX3456P3Z9
+UrbanMax Realty,Real Estate,Pending,10072,29URMAX7890Q4Z1
+PureEdge Clinics,Healthcare,Verified,10073,27PREDG2345R5Z2
+SafeEdge Finance,Finance,Verified,10074,27SFEDG1234F1Z5
+BrightMax Academy,Education,Pending,10075,27BRMAX2345R5Z2
+FarmMax Organics,Agriculture,Verified,10076,32FRMAX5678K2Z7
+TechMax Labs,IT Services,Flagged,10077,27TMX3456P3Z9
+BuildMax Realty,Real Estate,Verified,10078,29BLDMX7890Q4Z1
+AeroEdge Systems,Manufacturing,Pending,10079,33AREDG3456P3Z9
+EduEdge Academy,Education,Verified,10080,27EDEDG7890Q4Z1
+AgriMax Farms,Agriculture,Flagged,10081,32AGMAX2345R5Z2
+CloudSphere IT,IT Services,Verified,10082,29CLSPH5678K2Z7
+UrbanSphere Realty,Real Estate,Pending,10083,29URSPH3456P3Z9
+MediMax Healthcare,Healthcare,Verified,10084,27MDMAX7890Q4Z1
+FinEdge Bank,Finance,Flagged,10085,27FEDGE2345R5Z2
+RetailMax Stores,Retail,Verified,10086,27RTMAX1234F1Z5
+EduSphere Pvt Ltd,Education,Pending,10087

@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Student - Admin{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
+
+{% block content %}
+{% set f = form_data or {} %}
+<div class="dashboard-container">
+    <div class="header-section" style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="text-align: left;">
+            <div class="logo-circle" style="margin: 0;">CEC</div>
+            <h1 style="font-size: 1.8rem; margin-top: 10px;">Edit Student</h1>
+            <p style="opacity: 0.8; margin-top: 6px;">ID: {{ student.st_id }} • {{ student.register_number }}</p>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+            <a href="{{ url_for('admin_students') }}" class="dash-btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid white;">Back</a>
+            <a href="/admin/logout" class="dash-btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid white;">Logout</a>
+        </div>
+    </div>
+
+    <div class="chart-container" style="height: auto; min-height: 200px;">
+        <form method="POST" action="{{ url_for('admin_edit_student', student_id=student.st_id) }}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px;">
+            <div class="input-group">
+                <input type="text" name="register_number" required value="{{ f.get('register_number', student.register_number or '') }}" placeholder=" ">
+                <label>Register Number</label>
+            </div>
+            <div class="input-group">
+                <input type="text" name="name" required value="{{ f.get('name', student.name or '') }}" placeholder=" ">
+                <label>Name</label>
+            </div>
+            <div class="input-group">
+                <input type="email" name="email" required value="{{ f.get('email', student.email or '') }}" placeholder=" ">
+                <label>Email</label>
+            </div>
+            <div class="input-group">
+                <input type="tel" name="phone" value="{{ f.get('phone', student.phone or '') }}" placeholder=" ">
+                <label>Phone</label>
+            </div>
+            <div class="input-group">
+                <input type="text" name="department" value="{{ f.get('department', student.department or '') }}" placeholder=" ">
+                <label>Department</label>
+            </div>
+            <div class="input-group">
+                <input type="number" min="1" max="10" step="1" name="year" value="{{ f.get('year', student.year or '') }}" placeholder=" ">
+                <label>Year</label>
+            </div>
+            <div class="input-group">
+                <input type="number" min="0" max="10" step="0.01" name="cgpa" value="{{ f.get('cgpa', student.cgpa or '') }}" placeholder=" ">
+                <label>CGPA</label>
+            </div>
+            <div class="input-group">
+                <input type="number" min="0" max="100" step="0.01" name="tenth_percentage" value="{{ f.get('tenth_percentage', student.tenth_percentage or '') }}" placeholder=" ">
+                <label>10th %</label>
+            </div>
+            <div class="input-group">
+                <input type="number" min="0" max="100" step="0.01" name="twelfth_percentage" value="{{ f.get('twelfth_percentage', student.twelfth_percentage or '') }}" placeholder=" ">
+                <label>12th %</label>
+            </div>
+            <div class="input-group">
+                <input type="number" min="0" step="1" name="number_of_arrears" value="{{ f.get('number_of_arrears', student.number_of_arrears or '') }}" placeholder=" ">
+                <label>Arrears</label>
+            </div>
+
+            <div class="input-group" style="grid-column: 1 / -1;">
+                <textarea name="technical_skills" rows="3" placeholder=" ">{{ f.get('technical_skills', student.technical_skills or '') }}</textarea>
+                <label>Technical Skills</label>
+            </div>
+            <div class="input-group">
+                <input type="text" name="programming_languages" value="{{ f.get('programming_languages', student.programming_languages or '') }}" placeholder=" ">
+                <label>Programming Languages</label>
+            </div>
+            <div class="input-group">
+                <input type="text" name="tools_technologies" value="{{ f.get('tools_technologies', student.tools_technologies or '') }}" placeholder=" ">
+                <label>Tools & Technologies</label>
+            </div>
+            <div class="input-group" style="grid-column: 1 / -1;">
+                <textarea name="projects" rows="3" placeholder=" ">{{ f.get('projects', student.projects or '') }}</textarea>
+                <label>Projects</label>
+            </div>
+            <div class="input-group" style="grid-column: 1 / -1;">
+                <textarea name="internship_experience" rows="3" placeholder=" ">{{ f.get('internship_experience', student.internship_experience or '') }}</textarea>
+                <label>Internship Experience</label>
+            </div>
+            <div class="input-group" style="grid-column: 1 / -1;">
+                <textarea name="certifications" rows="3" placeholder=" ">{{ f.get('certifications', student.certifications or '') }}</textarea>
+                <label>Certifications</label>
+            </div>
+
+            <div class="input-group" style="grid-column: 1 / -1;">
+                <input type="password" name="new_password" placeholder=" " autocomplete="new-password">
+                <label>Set New Password (Optional)</label>
+            </div>
+            <p style="grid-column: 1 / -1; font-size: 0.75rem; opacity: 0.8; margin-top: -10px;">
+                Strong password: 8+ chars with uppercase, lowercase, number, and special character.
+            </p>
+
+            <div style="grid-column: 1 / -1; text-align: center;">
+                <button type="submit" class="submit-btn" style="width: 320px; margin: 0 auto;">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+

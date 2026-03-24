@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Question Bank Upload - CEC{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="header-section" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+        <div style="text-align:left;">
+            <h2>Question Bank Upload</h2>
+            <p class="tagline">Bulk upload Aptitude, Logical, Technical, Coding questions via CSV.</p>
+        </div>
+        <a href="{{ url_for('admin_dashboard') }}" class="dash-btn">&larr; Back to Dashboard</a>
+    </div>
+
+    <div class="feature-grid" style="margin-bottom: 20px;">
+        <div class="feature-card"><h5>Aptitude</h5><h2 style="color:#ff69b4;">{{ counts.Aptitude }}</h2></div>
+        <div class="feature-card"><h5>Logical</h5><h2 style="color:#ff69b4;">{{ counts.Logical }}</h2></div>
+        <div class="feature-card"><h5>Technical</h5><h2 style="color:#ff69b4;">{{ counts.Technical }}</h2></div>
+        <div class="feature-card"><h5>Coding</h5><h2 style="color:#ff69b4;">{{ counts.Coding }}</h2></div>
+    </div>
+
+    <div class="chart-container" style="height:auto; margin-bottom: 20px;">
+        <h3 style="margin-bottom:12px;">Upload CSV</h3>
+        <p style="opacity:0.9; margin:0 0 10px 0;">Required columns: <code>section,question_text,option_a,option_b,option_c,option_d,correct_answer</code></p>
+        <p style="opacity:0.9; margin:0 0 16px 0;">Allowed section values: <code>Aptitude, Logical, Technical, Coding</code>. Correct answer: <code>A/B/C/D</code>.</p>
+        <form method="POST" enctype="multipart/form-data" style="display:grid; gap:14px;">
+            <div class="input-group">
+                <input type="file" name="csv_file" accept=".csv" required style="padding:12px;">
+            </div>
+            <button type="submit" class="submit-btn">Upload Questions</button>
+        </form>
+    </div>
+
+    {% if import_errors %}
+    <div class="feature-card" style="text-align:left;">
+        <h4 style="margin-bottom:10px;">Row Errors (showing first {{ import_errors|length }})</h4>
+        <ul style="margin:0; padding-left: 20px;">
+            {% for error in import_errors %}
+            <li style="margin-bottom: 6px;">{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

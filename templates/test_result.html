@@ -96,5 +96,19 @@ if (window.Chart && sectionCtx) {
         }
     });
 }
+
+// Trigger dashboard analytics refresh after a completed test.
+try {
+    localStorage.setItem("analytics_refresh_ts", String(Date.now()));
+} catch (e) {
+    // ignore
+}
+try {
+    const ch = new BroadcastChannel("analytics_refresh");
+    ch.postMessage({ ts: Date.now() });
+    ch.close();
+} catch (e) {
+    // ignore
+}
 </script>
 {% endblock %}

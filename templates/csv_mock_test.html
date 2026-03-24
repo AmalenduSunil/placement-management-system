@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}CSV Mock Test - CEC{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+  <div class="header-section" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+    <div style="text-align:left;">
+      <h1>{% if mode == 'practice' %}Practice Mode{% else %}Full Placement Mock Test{% endif %}</h1>
+      <p class="tagline">
+        {% if mode == 'practice' %}
+          Easy-first practice set generated from <code>questions.csv</code>.
+        {% else %}
+          Generate a full placement-style mock test from <code>questions.csv</code> and submit for an instant score.
+        {% endif %}
+      </p>
+    </div>
+    <a href="{{ url_for('mock_tests') }}" class="dash-btn">&larr; Back to Tests</a>
+  </div>
+
+  <div class="feature-card" style="text-align:left; margin-bottom: 14px;">
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between;">
+      <div>
+        <div style="font-weight:700;">Rules</div>
+        <div style="opacity:0.9;font-size:0.9rem;">
+          30 questions • balanced sections • randomized selection
+          {% if mode == 'practice' %}• easy-first{% else %}• mixed difficulty{% endif %}
+        </div>
+      </div>
+      <button class="dash-btn" id="startBtn" type="button" style="border:none; cursor:pointer;">
+        <i class="bi bi-play-fill"></i> Start / Regenerate
+      </button>
+    </div>
+    <div id="statusBox" style="margin-top: 12px; display:none;"></div>
+  </div>
+
+  <div id="testRoot"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  window.CSV_MOCK_API = {
+    generate: {{ url_for('api_csv_mock_generate') | tojson }},
+    submit: {{ url_for('api_csv_mock_submit') | tojson }}
+  };
+  window.CSV_MOCK_MODE = {{ mode | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/csv_mock_test.js') }}"></script>
+{% endblock %}

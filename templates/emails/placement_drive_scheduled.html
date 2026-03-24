@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placement Drive Scheduled: {{ drive.cmpname }}</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e1e8ed;
+        }
+        .header {
+            background-color: #1e3a8a;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            color: #ffffff;
+            margin: 0;
+            font-size: 24px;
+            letter-spacing: 0.5px;
+        }
+        .content {
+            padding: 30px;
+        }
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .intro {
+            margin-bottom: 25px;
+            color: #555555;
+        }
+        .details-card {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+        }
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .details-table td {
+            padding: 10px 0;
+            vertical-align: top;
+        }
+        .details-label {
+            font-weight: bold;
+            color: #4b5563;
+            width: 40%;
+        }
+        .details-value {
+            color: #111827;
+            font-weight: 500;
+        }
+        .cta-container {
+            text-align: center;
+            margin: 35px 0 15px;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #2563eb;
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 14px 28px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .footer {
+            background-color: #f9fafb;
+            padding: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #6b7280;
+            border-top: 1px solid #e5e7eb;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Upcoming Placement Drive</h1>
+        </div>
+        <div class="content">
+            <div class="greeting">
+                Dear {{ student.name }},
+            </div>
+            <div class="intro">
+                A placement drive has been scheduled with <strong>{{ drive.cmpname }}</strong>.
+                Please review the details and register on the portal.
+            </div>
+
+            <div class="details-card">
+                <table class="details-table">
+                    <tr>
+                        <td class="details-label">Company Name:</td>
+                        <td class="details-value">{{ drive.cmpname }}</td>
+                    </tr>
+                    {% if drive.jobreq %}
+                    <tr>
+                        <td class="details-label">Job Role:</td>
+                        <td class="details-value">{{ drive.jobreq }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if drive.date %}
+                    <tr>
+                        <td class="details-label">Date:</td>
+                        <td class="details-value">{{ drive.date.strftime('%B %d, %Y') }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if drive.venue %}
+                    <tr>
+                        <td class="details-label">Venue:</td>
+                        <td class="details-value">{{ drive.venue }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if drive.package %}
+                    <tr>
+                        <td class="details-label">Salary Package:</td>
+                        <td class="details-value">{{ drive.package }} LPA</td>
+                    </tr>
+                    {% endif %}
+                    {% if drive.eligicri %}
+                    <tr>
+                        <td class="details-label">Eligibility:</td>
+                        <td class="details-value">{{ drive.eligicri }}</td>
+                    </tr>
+                    {% endif %}
+                </table>
+            </div>
+
+            <div class="cta-container">
+                <a href="{{ url_for('login_page', _external=True) }}" class="btn">Register on Student Portal</a>
+            </div>
+        </div>
+        <div class="footer">
+            <p>This is an automated message from the Training & Placement Cell.</p>
+            <p>{{ config.get('COLLEGE_NAME', 'CEC Placement Administration') }}</p>
+        </div>
+    </div>
+</body>
+</html>
